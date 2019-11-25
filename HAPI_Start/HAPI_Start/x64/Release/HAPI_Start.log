@@ -1,0 +1,13 @@
+﻿  Entity.cpp
+C:\Users\v8078659\Source\Game-Engine-Construction\HAPI_Start\HAPI_Start\Entity.cpp(21,17): warning C4552:  '-': result of expression not used
+C:\Users\v8078659\Source\Game-Engine-Construction\HAPI_Start\HAPI_Start\Entity.cpp(25,17): warning C4552:  '+': result of expression not used
+C:\Users\v8078659\Source\Game-Engine-Construction\HAPI_Start\HAPI_Start\Entity.cpp(29,17): warning C4552:  '-': result of expression not used
+  main.cpp
+  Player.cpp
+  Rectangle.cpp
+  Sprite.cpp
+  Visualisation.cpp
+  World.cpp
+  Generating Code...
+C:\Users\v8078659\Source\Game-Engine-Construction\HAPI_Start\HAPI_Start\Entity.cpp(33,17): warning C4552:  '+': result of expression not used
+LINK : fatal error LNK1181: cannot open input file 'HAPI64.lib'
