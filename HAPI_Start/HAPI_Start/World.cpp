@@ -21,15 +21,17 @@ bool World::Initialise()
 	if (!LoadLevel())
 		return false;
 
+	HAPI.SetShowFPS(true);
+
 	return true;
 }
 
 bool World::LoadLevel()
 {
 	// Creating sprites
-	if (!m_vis->CreateSprite("Data\\spaceBackground.png", "background"))
+	if (!m_vis->CreateSprite("Data\\environment.png", "background")) // BACKGROUND MAKE ENTITY
 		return false;
-	if (!m_vis->CreateSprite("Data\\playerSprite.tga", "player"))
+	if (!m_vis->CreateSprite("Data\\player.png", "player"))
 		return false;
 
 	m_vis->CreateSourceRect("player");
@@ -49,5 +51,10 @@ void World::Run()
 		m_vis->ClearToColour(clearScreenCol);
 		m_vis->DrawBackgroundSprite("background", 0, 0);
 		m_vis->DrawSprite("player", entities[0]->GetPos().xPos, entities[0]->GetPos().yPos);
+
+		for (auto& entity : entities)
+		{
+			entity->Update();
+		}
 	}
 }

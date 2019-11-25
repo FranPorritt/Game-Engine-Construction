@@ -28,6 +28,7 @@ public:
 	Entity(const std::string& graphicIDArg);
 	~Entity();
 
+	void Update();
 	// Sets direction based on user input or ai
 	virtual void Direction() = 0;
 	// Moves entity based on direction

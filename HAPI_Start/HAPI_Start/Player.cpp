@@ -4,6 +4,7 @@ using namespace HAPISPACE;
 
 Player::Player(const std::string& graphicIDArg) : Entity(graphicIDArg)
 {
+	speed = 1;
 }
 
 Player::~Player()
@@ -13,24 +14,27 @@ Player::~Player()
 void Player::Direction()
 {
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
-	HAPI.SetShowFPS(true);
 
 	//  Set enum
 	if ((keyData.scanCode['W']))
 	{
 		direction = EDirection::eUp;
 	}
-	if ((keyData.scanCode['S']))
+	else if ((keyData.scanCode['S']))
 	{
 		direction = EDirection::eDown;
 	}
-	if ((keyData.scanCode['A']))
+	else if ((keyData.scanCode['A']))
 	{
 		direction = EDirection::eLeft;
 	}
-	if (keyData.scanCode['D'])
+	else if (keyData.scanCode['D'])
 	{
 		direction = EDirection::eRight;
+	}
+	else
+	{
+		direction = EDirection::eStop;
 	}
 
 	// Controller Input

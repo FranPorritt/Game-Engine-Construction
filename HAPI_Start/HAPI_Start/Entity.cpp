@@ -11,6 +11,11 @@ Entity::~Entity()
 {
 }
 
+void Entity::Update()
+{
+	Movement();
+}
+
 void Entity::Movement()
 {
 	Direction();
@@ -18,19 +23,19 @@ void Entity::Movement()
 	switch (direction)
 	{
 	case EDirection::eUp:
-		position.yPos - speed;
+		position.yPos -= speed;
 		break;
 
 	case EDirection::eDown:
-		position.yPos + speed;
+		position.yPos += speed;
 		break;
 
 	case EDirection::eLeft:
-		position.xPos - speed;
+		position.xPos -= speed;
 		break;
 
 	case EDirection::eRight:
-		position.xPos + speed;
+		position.xPos += speed;
 		break;
 
 	case EDirection::eStop:
