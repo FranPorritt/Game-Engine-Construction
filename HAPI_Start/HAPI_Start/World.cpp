@@ -29,9 +29,9 @@ bool World::Initialise()
 bool World::LoadLevel()
 {
 	// Creating sprites
-	if (!m_vis->CreateSprite("Data\\environment.png", "background")) // BACKGROUND MAKE ENTITY
+	if (!m_vis->CreateSprite("Data\\environment.png", "background", 1, 1)) // BACKGROUND MAKE ENTITY
 		return false;
-	if (!m_vis->CreateSprite("Data\\player.png", "player"))
+	if (!m_vis->CreateSprite("Data\\Leah.png", "player", 4, 4))
 		return false;
 
 	m_vis->CreateSourceRect("player");

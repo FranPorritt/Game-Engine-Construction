@@ -25,7 +25,7 @@ public:
 
 	void ClearToColour(HAPI_TColour colour);
 
-	bool CreateSprite(const string& filename, const string& name);
+	bool CreateSprite(const string& filename, const string& name, int frameCol, int frameRow);
 	void CreateSourceRect(const string& filename);
 	void DrawBackgroundSprite(const string& name, int spriteX, int spriteY); // Doesn't check for clipping, improves framerate
 	void DrawSprite(const string& name, int spriteX, int spriteY);

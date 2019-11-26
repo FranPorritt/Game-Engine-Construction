@@ -30,9 +30,9 @@ void Visualisation::ClearToColour(HAPI_TColour colour)
 	}
 }
 
-bool Visualisation::CreateSprite(const string& filename, const string& name)
+bool Visualisation::CreateSprite(const string& filename, const string& name, int frameCol, int frameRow)
 {
-	Sprite* newSprite = new Sprite(); 
+	Sprite* newSprite = new Sprite(frameCol, frameRow); 
 	if (!newSprite->Initialise(filename))
 	{
 		HAPI.UserMessage("uh oh, spaghetti-o! File not found!", "Error");

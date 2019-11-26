@@ -1,7 +1,9 @@
 #include "Sprite.h"
 
-Sprite::Sprite()
+Sprite::Sprite(int& frameCol, int& frameRow)
 {
+	frameCols = frameCol;
+	frameRows = frameRow;
 }
 
 Sprite::~Sprite()
@@ -19,8 +21,11 @@ bool Sprite::Initialise(const string& filename)
 
 void Sprite::CreateRect()
 {
-	sourceRect.bottom = spriteHeight;
-	sourceRect.right = spriteWidth;
+	sourceRect.bottom = spriteHeight / frameRows;
+	sourceRect.right = spriteWidth / frameCols;
+
+	frameSizeHeight = spriteHeight / frameRows;
+	frameSizeWidth = spriteWidth / frameCols;
 }
 
 void Sprite::Render(int spriteX, int spriteY, BYTE* screen, int screenWidth, int screenHeight)
@@ -30,11 +35,11 @@ void Sprite::Render(int spriteX, int spriteY, BYTE* screen, int screenWidth, int
 	BYTE* screenPntr = screen + offset;
 	BYTE* texturePntr = data;
 
-	int endOfLineScreenIncrement = (screenWidth - spriteWidth) * 4;
+	int endOfLineScreenIncrement = (screenWidth - frameSizeWidth) * 4;
 
-	for (int y = 0; y < spriteHeight; y++)
+	for (int y = 0; y < frameSizeHeight; y++)
 	{
-		for (int x = 0; x < spriteWidth; x++)
+		for (int x = 0; x < frameSizeWidth; x++)
 		{
 			BYTE blue = texturePntr[0];
 			BYTE green = texturePntr[1];
@@ -125,5 +130,4 @@ void Sprite::ClipBlit(int& spriteX, int& spriteY, BYTE* screen, Rectangle& destR
 			}
 		}
 	}
-	//clippedRect.Translate(-spriteX, -spriteY);
 }

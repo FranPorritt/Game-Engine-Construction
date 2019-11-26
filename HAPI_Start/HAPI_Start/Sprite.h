@@ -12,10 +12,17 @@ protected:
 
 	int spriteWidth = 0;
 	int spriteHeight = 0;
+
+	int frameCols;
+	int frameRows;
+
+	int frameSizeWidth = 0;
+	int frameSizeHeight = 0;
+
 	BYTE* data = nullptr;
 
 public:
-	Sprite();
+	Sprite(int& frameCols, int& frameRows);
 	~Sprite();
 
 	bool Initialise(const string& filename);
