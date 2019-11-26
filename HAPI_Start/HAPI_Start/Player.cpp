@@ -5,6 +5,7 @@ using namespace HAPISPACE;
 Player::Player(const std::string& graphicIDArg) : Entity(graphicIDArg)
 {
 	speed = 1;
+	position = { 512 , 384 };
 }
 
 Player::~Player()
