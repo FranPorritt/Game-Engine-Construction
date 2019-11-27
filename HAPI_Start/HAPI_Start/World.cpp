@@ -1,8 +1,8 @@
 #include "World.h"
 #include <HAPI_lib.h>
 #include "Visualisation.h"
-#include "Entity.h"
 #include "Player.h"
+#include "Environment.h"
 
 using namespace HAPISPACE;
 
@@ -31,12 +31,28 @@ bool World::LoadLevel()
 	// Creating sprites
 	if (!m_vis->CreateSprite("Data\\environment.png", "background", 1, 1)) // BACKGROUND MAKE ENTITY
 		return false;
-	if (!m_vis->CreateSprite("Data\\Leah.png", "player", 4, 4))
+	if (!m_vis->CreateSprite("Data\\player.png", "player", 4, 4)) // Last 2 ints for sprite sheets
+		return false;
+	if (!m_vis->CreateSprite("Data\\fenceFront.png", "fenceFront", 1, 1))
+		return false;
+	if (!m_vis->CreateSprite("Data\\fenceFront.png", "fenceBack", 1, 1))
+		return false;
+	if (!m_vis->CreateSprite("Data\\fenceSide.png", "fenceLeft", 1, 1))
+		return false;
+	if (!m_vis->CreateSprite("Data\\fenceSide.png", "fenceRight", 1, 1))
 		return false;
 
-	m_vis->CreateSourceRect("player");
+	// Draw order
+	entities.push_back(new Environment("fenceBack", { 180, 176 }));
+	entities.push_back(new Environment("fenceLeft", { 191, 205 }));
+	entities.push_back(new Environment("fenceRight", { 788, 205 }));
+	entities.push_back(new Player("player", { 512, 384 }));
+	entities.push_back(new Environment("fenceFront", { 180, 576 })); // Must be drawn after Player
 
-	entities.push_back(new Player("player"));
+	for (auto& entity : entities)
+	{
+		m_vis->CreateSourceRect(entity->GetID());
+	}
 
 	return true;
 }
@@ -50,10 +66,10 @@ void World::Run()
 	{
 		m_vis->ClearToColour(clearScreenCol);
 		m_vis->DrawBackgroundSprite("background", 0, 0);
-		m_vis->DrawSprite("player", entities[0]->GetPos().xPos, entities[0]->GetPos().yPos);
 
 		for (auto& entity : entities)
 		{
+			m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
 			entity->Update();
 		}
 	}

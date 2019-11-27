@@ -35,11 +35,11 @@ void Sprite::Render(int spriteX, int spriteY, BYTE* screen, int screenWidth, int
 	BYTE* screenPntr = screen + offset;
 	BYTE* texturePntr = data;
 
-	int endOfLineScreenIncrement = (screenWidth - frameSizeWidth) * 4;
+	int endOfLineScreenIncrement = (screenWidth - spriteWidth) * 4;
 
-	for (int y = 0; y < frameSizeHeight; y++)
+	for (int y = 0; y < spriteHeight; y++)
 	{
-		for (int x = 0; x < frameSizeWidth; x++)
+		for (int x = 0; x < spriteWidth; x++)
 		{
 			BYTE blue = texturePntr[0];
 			BYTE green = texturePntr[1];

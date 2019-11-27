@@ -2,10 +2,9 @@
 
 using namespace HAPISPACE;
 
-Player::Player(const std::string& graphicIDArg) : Entity(graphicIDArg)
+Player::Player(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
 	speed = 1;
-	position = { 512 , 384 };
 }
 
 Player::~Player()
@@ -17,19 +16,19 @@ void Player::Direction()
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 
 	//  Set enum
-	if ((keyData.scanCode['W']))
+	if ((keyData.scanCode['W']) && (position.yPos > 180)) // MAGIC NUMBERS
 	{
 		direction = EDirection::eUp;
 	}
-	else if ((keyData.scanCode['S']))
+	else if ((keyData.scanCode['S']) && (position.yPos < 560))
 	{
 		direction = EDirection::eDown;
 	}
-	else if ((keyData.scanCode['A']))
+	else if ((keyData.scanCode['A']) && (position.xPos > 205))
 	{
 		direction = EDirection::eLeft;
 	}
-	else if (keyData.scanCode['D'])
+	else if (keyData.scanCode['D'] && (position.xPos < 760))
 	{
 		direction = EDirection::eRight;
 	}
@@ -42,19 +41,19 @@ void Player::Direction()
 	const HAPI_TControllerData& controllerData = HAPI.GetControllerData(0);
 	if (controllerData.isAttached)
 	{
-		if (controllerData.digitalButtons[HK_DIGITAL_DPAD_UP])
+		if ((controllerData.digitalButtons[HK_DIGITAL_DPAD_UP]) && (position.yPos > 180))
 		{
 			direction = EDirection::eUp;
 		}
-		if (controllerData.digitalButtons[HK_DIGITAL_DPAD_DOWN])
+		if ((controllerData.digitalButtons[HK_DIGITAL_DPAD_DOWN]) && (position.yPos < 560))
 		{
 			direction = EDirection::eDown;
 		}
-		if (controllerData.digitalButtons[HK_DIGITAL_DPAD_LEFT])
+		if ((controllerData.digitalButtons[HK_DIGITAL_DPAD_LEFT]) && (position.xPos > 205))
 		{
 			direction = EDirection::eLeft;
 		}
-		if (controllerData.digitalButtons[HK_DIGITAL_DPAD_RIGHT])
+		if ((controllerData.digitalButtons[HK_DIGITAL_DPAD_RIGHT]) && (position.xPos < 760))
 		{
 			direction = EDirection::eRight;
 		}

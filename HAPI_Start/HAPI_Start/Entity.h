@@ -17,7 +17,7 @@ class Entity
 {
 protected:
 	EDirection direction = EDirection::eStop;
-	const Rectangle rect;
+	Rectangle rect;
 	const std::string graphicID = NULL;
 	vector2<int> position = { 0,0 };
 	int speed = 0;
@@ -25,9 +25,10 @@ protected:
 	bool activeFlag = false;
 
 public:
-	Entity(const std::string& graphicIDArg);
+	Entity(const std::string& graphicIDArg, vector2<int>& positionArg);
 	~Entity();
 
+	void CreateRect(int spriteHeight, int spriteWidth);
 	void Update();
 	// Sets direction based on user input or ai
 	virtual void Direction() = 0;
@@ -35,5 +36,6 @@ public:
 	void Movement();
 
 	vector2<int> GetPos() { return position; };
+	std::string GetID() { return graphicID; };
 };
 

@@ -3,12 +3,18 @@
 
 using namespace HAPISPACE;
 
-Entity::Entity(const std::string& graphicIDArg) : graphicID(graphicIDArg)
+Entity::Entity(const std::string& graphicIDArg, vector2<int>& positionArg) : graphicID(graphicIDArg), position(positionArg)
 {
 }
 
 Entity::~Entity()
 {
+}
+
+void Entity::CreateRect(int spriteHeight, int spriteWidth)
+{
+	rect.bottom = spriteHeight;
+	rect.right = spriteWidth;
 }
 
 void Entity::Update()
