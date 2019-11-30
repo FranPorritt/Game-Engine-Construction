@@ -2,7 +2,9 @@
 #include <HAPI_lib.h>
 #include "Visualisation.h"
 #include "Player.h"
+#include "Chicken.h"
 #include "Environment.h"
+#include <time.h>
 
 using namespace HAPISPACE;
 
@@ -28,11 +30,17 @@ bool World::Initialise()
 
 bool World::LoadLevel()
 {
-	// Creating sprites
+	// Background Sprite
 	if (!m_vis->CreateSprite("Data\\environment.png", "background", 1, 1)) // BACKGROUND MAKE ENTITY
 		return false;
+
+	// Player Sprite
 	if (!m_vis->CreateSprite("Data\\player.png", "player", 4, 4)) // Last 2 ints for sprite sheets
 		return false;
+	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken", 1, 1))
+		return false;
+
+	// Fences Play Area
 	if (!m_vis->CreateSprite("Data\\fenceFront.png", "fenceFront", 1, 1))
 		return false;
 	if (!m_vis->CreateSprite("Data\\fenceFront.png", "fenceBack", 1, 1))
@@ -47,6 +55,7 @@ bool World::LoadLevel()
 	entities.push_back(new Environment("fenceLeft", { 191, 205 }));
 	entities.push_back(new Environment("fenceRight", { 788, 205 }));
 	entities.push_back(new Player("player", { 512, 384 }));
+	entities.push_back(new Chicken("chicken", { 560, 384 }));
 	entities.push_back(new Environment("fenceFront", { 180, 576 })); // Must be drawn after Player
 
 	for (auto& entity : entities)
@@ -58,19 +67,27 @@ bool World::LoadLevel()
 }
 
 void World::Run()
-{	
+{
 	HAPI_TColour clearScreenCol = HAPI_TColour::BLACK;
 	m_vis->ClearToColour(clearScreenCol);
 
 	while (HAPI.Update())
 	{
-		m_vis->ClearToColour(clearScreenCol);
-		m_vis->DrawBackgroundSprite("background", 0, 0);
+		currentTime = clock();
 
-		for (auto& entity : entities)
+		if (currentTime >= callTime + tickRate)
 		{
-			m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
-			entity->Update();
+			m_vis->ClearToColour(clearScreenCol);
+			m_vis->DrawBackgroundSprite("background", 0, 0);
+
+			// Draws entities every frame
+			for (auto& entity : entities)
+			{
+				m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
+				entity->Update();
+			}
+
+			callTime = clock();
 		}
 	}
 }

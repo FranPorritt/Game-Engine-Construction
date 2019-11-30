@@ -1,50 +1,63 @@
 #include "Chicken.h"
+#include "Behaviour.h"
 
-Chicken::Chicken(const std::string& graphicIDArg, vector2<int>& positionArg) : Entity(graphicIDArg, positionArg)
+Chicken::Chicken(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
 	speed = 2;
+
+	//InitialiseWaypoints();
 }
 
 Chicken::~Chicken()
 {
 }
 
-void Chicken::InitialiseWaypoints()
+void Chicken::Tick(Behaviour& behaviour)
 {
-	// Waypoints needed:
-	// - Feeder
-	// - Coop
-	// - 5 Random points
-	// [7 total]
-
-	for (int wpIndex = 0; wpIndex < numOfRandWaypoints; wpIndex++)
-	{
-		int wpXPos = 200 + rand() % (780 - 200 + 1);
-		int wpYPos = 186 + rand() % (566 - 186 + 1);
-
-		waypoints.push_back({ wpXPos, wpYPos });
-	}
-
-	// INITIALISE FIRST TWO HERE AFTER THE RANDOMS -- ONCE YOU HAVE COORDS
-}
-
-void Chicken::SelectWaypoint()
-{
-	if (hasReachedDestination)
-	{
-		int randWaypoint = rand() % 6;
-
-		targetWaypoint = waypoints[randWaypoint];
-		hasReachedDestination = false;
-	}
-
-	if ((position.xPos == targetWaypoint.xPos) && (position.yPos == targetWaypoint.yPos)) // ISSUE: SPEED IS 2, MAY NEVER REACH EXACT POINT! DO IT BY RANGE INSTEAD
-	{
-		hasReachedDestination = true;
-	}
+	behaviour->Tick();
 }
 
 void Chicken::Direction()
 {	
-	// LOOK AT SNAKE AI AND INTERPOLATION SLIDES
+	
+
+	
+
+	//// Gets x and y distances and makes them positive if negative
+	//xTargetDistance = position.xPos - targetWaypoint.xPos;
+	//if (xTargetDistance < 0)
+	//{
+	//	xTargetDistance = -xTargetDistance;
+	//}
+	//yTargetDistance = position.yPos - targetWaypoint.yPos;
+	//if (yTargetDistance < 0)
+	//{
+	//	yTargetDistance = -yTargetDistance;
+	//}
+
+	//// Sets direction
+	//if (xTargetDistance > yTargetDistance)
+	//{
+	//	if (targetWaypoint.xPos > position.xPos)
+	//	{
+	//		direction = EDirection::eRight;
+	//	}
+	//	else
+	//	{
+	//		direction = EDirection::eLeft;
+	//	}
+	//}
+	//else
+	//{
+	//	if (targetWaypoint.yPos > position.yPos)
+	//	{
+	//		direction = EDirection::eDown;
+	//	}
+	//	else
+	//	{
+	//		direction = EDirection::eUp;
+	//	}
+	//}
+
+	//SelectWaypoint(); // Sets a new target if destination has been reached
 }

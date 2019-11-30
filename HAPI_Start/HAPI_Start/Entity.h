@@ -16,20 +16,23 @@ enum class EDirection
 class Entity
 {
 protected:
-	EDirection direction = EDirection::eStop;
 	Rectangle rect;
 	const std::string graphicID = NULL;
+	std::string behaviour = NULL;
 	vector2<int> position = { 0,0 };
 	int speed = 0;
 	int health = 0;
 	bool activeFlag = false;
 
 public:
+	EDirection direction = EDirection::eStop;
+
 	Entity(const std::string& graphicIDArg, vector2<int>& positionArg);
 	~Entity();
 
 	void CreateRect(int spriteHeight, int spriteWidth);
 	void Update();
+	virtual void Tick() = 0;
 	// Sets direction based on user input or ai
 	virtual void Direction() = 0;
 	// Moves entity based on direction

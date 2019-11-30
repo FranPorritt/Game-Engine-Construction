@@ -4,7 +4,7 @@ using namespace HAPISPACE;
 
 Player::Player(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
-	speed = 1;
+	speed = 3;
 }
 
 Player::~Player()

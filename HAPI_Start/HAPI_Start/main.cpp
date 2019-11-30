@@ -28,6 +28,8 @@ using namespace HAPISPACE;
 // When this function exits the program will close down
 void HAPI_Main()
 {
+	srand(time(0));
+	   
 	World* world = new World();
 	world->Initialise();
 	world->Run();
