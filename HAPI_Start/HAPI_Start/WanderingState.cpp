@@ -1,29 +1,36 @@
 #include "WanderingState.h"
+#include "IdleState.h"
 #include "Chicken.h"
 
-void WanderingState::Tick(Chicken& InChicken)
+ChickenState* WanderingState::Handle()
 {
-	const int randDir = rand() % 4;
+	return new IdleState();
+}
 
-	switch(randDir)
+void WanderingState::Update(Chicken& chicken)
+{
+	int random = rand() % 5;
+
+	switch (random)
 	{
 	case 0:
-		InChicken.direction = EDirection::eUp;
+		chicken.direction = EDirection::eUp;
 		break;
 
 	case 1:
-		InChicken.direction = EDirection::eDown;
+		chicken.direction = EDirection::eDown;
 		break;
 
 	case 2:
-		InChicken.direction = EDirection::eLeft;
+		chicken.direction = EDirection::eLeft;
 		break;
 
 	case 3:
-		InChicken.direction = EDirection::eRight;
+		chicken.direction = EDirection::eRight;
 		break;
 
-	default:
+	case 4:
+		chicken.direction = EDirection::eStop;
 		break;
 	}
 }

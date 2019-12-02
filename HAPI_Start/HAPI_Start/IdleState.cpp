@@ -1,7 +1,13 @@
 #include "IdleState.h"
+#include "WanderingState.h"
 #include "Chicken.h"
 
-void IdleState::Tick(Chicken& InChicken)
+ChickenState* IdleState::Handle()
 {
-	InChicken.direction = EDirection::eStop;
+	return new WanderingState();
+}
+
+void IdleState::Update(Chicken& chicken)
+{
+	chicken.direction = EDirection::eStop;
 }

@@ -96,7 +96,7 @@ void World::Run()
 			for (auto& chicken : chickenEntities)
 			{
 				m_vis->DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
-				chicken->Update();
+				chicken->Movement();
 			}
 
 			callTime = clock();
@@ -106,8 +106,10 @@ void World::Run()
 		{
 			for (auto& chicken : chickenEntities)
 			{
-				// YOU ARE HERE -- IDK, SOMETHING ABOUT CHICKEN STATES
+				chicken->Handle();
 			}
+
+			chickenCallTime = clock();
 		}
 	}
 }

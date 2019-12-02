@@ -1,5 +1,7 @@
 #include "Chicken.h"
 #include "ChickenState.h"
+#include "WanderingState.h"
+#include "IdleState.h"
 #include <HAPI_lib.h>
 
 using namespace HAPISPACE;
@@ -7,18 +9,24 @@ using namespace HAPISPACE;
 Chicken::Chicken(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
 	speed = 2;
-	chickenState = new ChickenState();
+	chickenState = new IdleState();
 }
 
 Chicken::~Chicken()
 {
 }
 
-void Chicken::Tick(ChickenState* newChickenState)
+void Chicken::Handle()
 {
-	chickenState = newChickenState;
+	ChickenState* state = chickenState->Handle();
+	if (state != NULL)
+	{
+		delete chickenState;
+		chickenState = state;
+	}
 }
 
 void Chicken::Direction()
 {
+	chickenState->Update(*this);
 }

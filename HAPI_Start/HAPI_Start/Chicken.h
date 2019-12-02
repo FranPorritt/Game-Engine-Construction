@@ -14,9 +14,10 @@ private:
 	ChickenState* chickenState;
 
 public:
+
 	Chicken(const std::string& graphicIDArg, vector2<int> positionArg);
 	~Chicken();
 
-	void Tick(ChickenState* newChickenState);
+	void Handle();
 	void Direction();
 };

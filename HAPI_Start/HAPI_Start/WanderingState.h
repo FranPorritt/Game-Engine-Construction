@@ -1,10 +1,11 @@
 #pragma once
+#include "ChickenState.h"
 
 class Chicken;
 
-class WanderingState
+class WanderingState : public ChickenState
 {
 public:
-	void Tick(Chicken& InChicken);
+	ChickenState* Handle();
+	void Update(Chicken& chicken);
 };
-
