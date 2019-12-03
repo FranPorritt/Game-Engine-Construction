@@ -12,6 +12,7 @@ public:
 	~ChickenState();
 
 	virtual ChickenState* Handle();
+	virtual void Enter();
 	virtual void Update(Chicken& chicken);
 };
 

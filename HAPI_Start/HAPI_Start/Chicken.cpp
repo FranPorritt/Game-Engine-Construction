@@ -8,7 +8,7 @@ using namespace HAPISPACE;
 
 Chicken::Chicken(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
-	speed = 2;
+	speed = 1;
 	chickenState = new IdleState();
 }
 
@@ -24,6 +24,8 @@ void Chicken::Handle()
 		delete chickenState;
 		chickenState = state;
 	}
+
+	chickenState->Enter();
 }
 
 void Chicken::Direction()

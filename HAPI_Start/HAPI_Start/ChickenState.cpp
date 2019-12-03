@@ -19,6 +19,10 @@ ChickenState* ChickenState::Handle()
 	return 0;
 }
 
+void ChickenState::Enter()
+{
+}
+
 void ChickenState::Update(Chicken& chicken)
 {
 }

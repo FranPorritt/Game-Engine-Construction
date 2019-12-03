@@ -110,6 +110,8 @@ void World::Run()
 			}
 
 			chickenCallTime = clock();
+
+			chickenRate = rand() % 200 + 600;
 		}
 	}
 }

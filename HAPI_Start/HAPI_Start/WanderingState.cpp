@@ -7,30 +7,43 @@ ChickenState* WanderingState::Handle()
 	return new IdleState();
 }
 
+void WanderingState::Enter()
+{
+	hasDirection = false;
+}
+
 void WanderingState::Update(Chicken& chicken)
 {
-	int random = rand() % 5;
-
-	switch (random)
+	if (!hasDirection)
 	{
-	case 0:
-		chicken.direction = EDirection::eUp;
-		break;
+		int random = rand() % 5;
 
-	case 1:
-		chicken.direction = EDirection::eDown;
-		break;
+		switch (random)
+		{
+		case 0:
+			if (chicken.position.yPos > 180) // POSITION IS PROTECTED UH OH
+			{
+				chicken.direction = EDirection::eUp;
+			}
+			break;
 
-	case 2:
-		chicken.direction = EDirection::eLeft;
-		break;
+		case 1:
+			chicken.direction = EDirection::eDown;
+			break;
 
-	case 3:
-		chicken.direction = EDirection::eRight;
-		break;
+		case 2:
+			chicken.direction = EDirection::eLeft;
+			break;
 
-	case 4:
-		chicken.direction = EDirection::eStop;
-		break;
+		case 3:
+			chicken.direction = EDirection::eRight;
+			break;
+
+		case 4:
+			chicken.direction = EDirection::eStop;
+			break;
+		}
+
+		hasDirection = true;
 	}
 }

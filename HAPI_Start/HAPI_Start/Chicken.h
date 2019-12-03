@@ -1,4 +1,5 @@
 #pragma once
+#include "vector2.h"
 #include <time.h>
 #include <vector>
 #include <string>
@@ -20,4 +21,6 @@ public:
 
 	void Handle();
 	void Direction();
+
+	vector2 GetPos() { return position; };
 };
