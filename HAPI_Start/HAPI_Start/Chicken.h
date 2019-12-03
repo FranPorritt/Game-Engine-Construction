@@ -13,6 +13,7 @@ class Chicken :	public Entity
 {
 private:
 	ChickenState* chickenState;
+	int chickenRate = 0;
 
 public:
 
@@ -22,5 +23,6 @@ public:
 	void Handle();
 	void Direction();
 
-	vector2 GetPos() { return position; };
+	vector2<int> GetPos() { return position; };
+	int GetRate() { return chickenRate; };
 };

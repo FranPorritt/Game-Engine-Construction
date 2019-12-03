@@ -10,6 +10,7 @@ Chicken::Chicken(const std::string& graphicIDArg, vector2<int> positionArg) : En
 {
 	speed = 1;
 	chickenState = new IdleState();
+	chickenRate = rand() % 300 + 600;
 }
 
 Chicken::~Chicken()

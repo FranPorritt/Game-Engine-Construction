@@ -21,22 +21,23 @@ void WanderingState::Update(Chicken& chicken)
 		switch (random)
 		{
 		case 0:
-			if (chicken.position.yPos > 180) // POSITION IS PROTECTED UH OH
-			{
+			if (chicken.GetPos().yPos > 180) 
 				chicken.direction = EDirection::eUp;
-			}
 			break;
 
 		case 1:
-			chicken.direction = EDirection::eDown;
+			if (chicken.GetPos().yPos < 560)
+				chicken.direction = EDirection::eDown;
 			break;
 
 		case 2:
-			chicken.direction = EDirection::eLeft;
+			if (chicken.GetPos().xPos > 205)
+				chicken.direction = EDirection::eLeft;
 			break;
 
 		case 3:
-			chicken.direction = EDirection::eRight;
+			if (chicken.GetPos().xPos < 760)
+				chicken.direction = EDirection::eRight;
 			break;
 
 		case 4:
@@ -45,5 +46,27 @@ void WanderingState::Update(Chicken& chicken)
 		}
 
 		hasDirection = true;
+	}
+	else
+	{
+		if ((chicken.GetPos().yPos <= 200) && (chicken.direction == EDirection::eUp))
+		{
+			chicken.direction = EDirection::eStop;
+		}
+
+		if ((chicken.GetPos().yPos >= 530) && (chicken.direction == EDirection::eDown))
+		{
+			chicken.direction = EDirection::eStop;
+		}
+
+		if ((chicken.GetPos().xPos <= 225) && (chicken.direction == EDirection::eLeft))
+		{
+			chicken.direction = EDirection::eStop;
+		}
+
+		if ((chicken.GetPos().xPos >= 740) && (chicken.direction == EDirection::eRight))
+		{
+			chicken.direction = EDirection::eStop;
+		}
 	}
 }

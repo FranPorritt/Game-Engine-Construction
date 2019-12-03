@@ -39,6 +39,12 @@ bool World::LoadLevel()
 		return false;
 	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken", 1, 1))
 		return false;
+	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken1", 1, 1))
+		return false;
+	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken2", 1, 1))
+		return false;
+	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken3", 1, 1))
+		return false;
 
 	// Fences Play Area
 	if (!m_vis->CreateSprite("Data\\fenceFront.png", "fenceFront", 1, 1))
@@ -58,6 +64,9 @@ bool World::LoadLevel()
 	entities.push_back(new Environment("fenceFront", { 180, 576 })); // Must be drawn after Player
 	
 	chickenEntities.push_back(new Chicken("chicken", { 560, 384 }));
+	chickenEntities.push_back(new Chicken("chicken1", { 430, 480 }));
+	chickenEntities.push_back(new Chicken("chicken2", { 650, 290 }));
+	chickenEntities.push_back(new Chicken("chicken3", { 390, 384 }));
 
 	for (auto& entity : entities)
 	{
@@ -106,7 +115,10 @@ void World::Run()
 		{
 			for (auto& chicken : chickenEntities)
 			{
-				chicken->Handle();
+				if (currentTime >= chickenCallTime + chicken->GetRate())
+				{
+					chicken->Handle();
+				}
 			}
 
 			chickenCallTime = clock();
