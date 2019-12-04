@@ -111,6 +111,7 @@ void World::Run()
 			callTime = clock();
 		}
 
+		// Controls switch between wandering and idle chicken states
 		if (currentTime >= chickenCallTime + chickenRate)
 		{
 			for (auto& chicken : chickenEntities)

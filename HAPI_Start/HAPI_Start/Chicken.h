@@ -6,8 +6,9 @@
 #include "Entity.h"
 
 class ChickenState;
-class Idle;
-class Wandering;
+class IdleState;
+class WanderingState;
+class HungryState;
 
 class Chicken :	public Entity
 {
@@ -16,7 +17,6 @@ private:
 	int chickenRate = 0;
 
 public:
-
 	Chicken(const std::string& graphicIDArg, vector2<int> positionArg);
 	~Chicken();
 

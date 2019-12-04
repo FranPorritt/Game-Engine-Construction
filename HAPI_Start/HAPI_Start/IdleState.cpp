@@ -1,10 +1,18 @@
 #include "IdleState.h"
 #include "WanderingState.h"
+#include "HungryState.h"
 #include "Chicken.h"
 
 ChickenState* IdleState::Handle()
 {
-	return new WanderingState();
+	if ((!isHungry) || (!isFeederFull))
+	{
+		return new WanderingState();
+	}
+	else if ((isHungry) && (isFeederFull))
+	{
+		return new HungryState();
+	}
 }
 
 void IdleState::Enter()

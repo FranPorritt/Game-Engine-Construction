@@ -2,6 +2,7 @@
 #include "ChickenState.h"
 #include "WanderingState.h"
 #include "IdleState.h"
+#include "HungryState.h"
 #include <HAPI_lib.h>
 
 using namespace HAPISPACE;
@@ -31,5 +32,5 @@ void Chicken::Handle()
 
 void Chicken::Direction()
 {
-	chickenState->Update(*this);
+	chickenState->Update();
 }

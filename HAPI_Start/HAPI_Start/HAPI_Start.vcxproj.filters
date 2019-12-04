@@ -51,6 +51,9 @@
     <ClCompile Include="ChickenState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HungryState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visualisation.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChickenState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HungryState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

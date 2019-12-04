@@ -1,10 +1,18 @@
 #include "WanderingState.h"
 #include "IdleState.h"
+#include "HungryState.h"
 #include "Chicken.h"
 
 ChickenState* WanderingState::Handle()
 {
-	return new IdleState();
+	if (!isHungry)
+	{
+		return new IdleState();
+	}
+	else if ((isHungry) && (isFeederFull))
+	{
+		return new HungryState();
+	}
 }
 
 void WanderingState::Enter()
@@ -42,6 +50,8 @@ void WanderingState::Update(Chicken& chicken)
 
 		case 4:
 			chicken.direction = EDirection::eStop;
+
+		default:
 			break;
 		}
 
@@ -51,21 +61,29 @@ void WanderingState::Update(Chicken& chicken)
 	{
 		if ((chicken.GetPos().yPos <= 200) && (chicken.direction == EDirection::eUp))
 		{
+			chicken.direction = EDirection::eDown;
+			hasDirection = true;
 			chicken.direction = EDirection::eStop;
 		}
 
-		if ((chicken.GetPos().yPos >= 530) && (chicken.direction == EDirection::eDown))
+		if ((chicken.GetPos().yPos >= 545) && (chicken.direction == EDirection::eDown))
 		{
+			chicken.direction = EDirection::eUp;
+			hasDirection = true;
 			chicken.direction = EDirection::eStop;
 		}
 
 		if ((chicken.GetPos().xPos <= 225) && (chicken.direction == EDirection::eLeft))
 		{
+			chicken.direction = EDirection::eRight;
+			hasDirection = true;
 			chicken.direction = EDirection::eStop;
 		}
 
 		if ((chicken.GetPos().xPos >= 740) && (chicken.direction == EDirection::eRight))
 		{
+			chicken.direction = EDirection::eLeft;
+			hasDirection = true;
 			chicken.direction = EDirection::eStop;
 		}
 	}
