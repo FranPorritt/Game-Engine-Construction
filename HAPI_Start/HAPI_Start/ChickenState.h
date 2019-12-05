@@ -7,14 +7,12 @@ class WanderingState;
 class ChickenState
 {
 protected:
-	static bool isHungry;
-	static bool isFeederFull; // MAYBE MOVE ELSEWHERE -- IN OWN ENTITY IDK
 
 public:
 	ChickenState();
 	~ChickenState();
 
-	virtual ChickenState* Handle();
-	virtual void Enter();
-	virtual void Update();
+	virtual ChickenState* Handle(Chicken& chicken);
+	virtual void Enter(Chicken& chicken);
+	virtual void Update(Chicken& chicken);
 };

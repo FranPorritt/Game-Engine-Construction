@@ -14,9 +14,13 @@ class Chicken :	public Entity
 {
 private:
 	ChickenState* chickenState;
+	ChickenState* state;
 	int chickenRate = 0;
 
 public:
+	bool isHungry = true;
+	bool isFeederFull = true; // WILL BE SET BY A GETTER FROM FEEDER ENTITY
+
 	Chicken(const std::string& graphicIDArg, vector2<int> positionArg);
 	~Chicken();
 

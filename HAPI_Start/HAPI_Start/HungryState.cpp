@@ -1,28 +1,33 @@
 #include "HungryState.h"
 #include "WanderingState.h"
+#include "EggState.h"
+#include "TransitionState.h"
 #include "Chicken.h"
 
-ChickenState* HungryState::Handle()
+ChickenState* HungryState::Handle(Chicken& chicken)
 {
-	if ((!isHungry) || (!isFeederFull))
+	if ((chicken.isHungry) && (!chicken.isFeederFull))
 	{
 		return new WanderingState();
 	}
-	else if ((!isHungry) && (!isFeederFull))
+	else if (!chicken.isHungry)
+	{
+		return new TransitionState();
+	}
+	else if ((chicken.isHungry) && (chicken.isFeederFull))
 	{
 		return new HungryState();
 	}
 }
 
-void HungryState::Enter()
+void HungryState::Enter(Chicken& chicken)
 {
 	// WILL CONTROL GRAPHICS AT SOME POINT, ECT.
 }
 
 void HungryState::Update(Chicken& chicken)
 {
-	if (isHungry)
-		Direction(chicken);
+	Direction(chicken);
 }
 
 void HungryState::Direction(Chicken& chicken)
@@ -40,16 +45,14 @@ void HungryState::Direction(Chicken& chicken)
 
 	if ((xFeederDistance <= 3) && (yFeederDistance <= 3))
 	{
-		isHungry = false; // CHANGE TO EATSTATE ONCE IMPLEMENTED
+		chicken.isHungry = false; // CHANGE TO EATSTATE ONCE IMPLEMENTED
 		chicken.direction = EDirection::eStop;
 	}
 	else
 	{
 		// Sets direction to feeder, prevents diagonal movement
-		if ((xFeederDistance > yFeederDistance) && (!isHeadingY))
+		if (xFeederDistance > yFeederDistance)
 		{
-			isHeadingX = true;
-
 			if (feederPos.xPos > chicken.GetPos().xPos)
 			{
 				chicken.direction = EDirection::eRight;
@@ -58,16 +61,9 @@ void HungryState::Direction(Chicken& chicken)
 			{
 				chicken.direction = EDirection::eLeft;
 			}
-
-			if (xFeederDistance <= 4)
-			{
-				isHeadingX = false;
-			}
 		}
-		else if ((xFeederDistance < yFeederDistance) && (!isHeadingX))
+		else if (xFeederDistance < yFeederDistance)
 		{
-			isHeadingY = true;
-
 			if (feederPos.yPos > chicken.GetPos().yPos)
 			{
 				chicken.direction = EDirection::eDown;
@@ -75,11 +71,6 @@ void HungryState::Direction(Chicken& chicken)
 			else
 			{
 				chicken.direction = EDirection::eUp;
-			}
-
-			if (yFeederDistance <= 4)
-			{
-				isHeadingY = false;
 			}
 		}
 	}

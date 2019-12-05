@@ -3,19 +3,19 @@
 #include "HungryState.h"
 #include "Chicken.h"
 
-ChickenState* IdleState::Handle()
+ChickenState* IdleState::Handle(Chicken& chicken)
 {
-	if ((!isHungry) || (!isFeederFull))
+	if ((!chicken.isHungry) || (!chicken.isFeederFull))
 	{
 		return new WanderingState();
 	}
-	else if ((isHungry) && (isFeederFull))
+	else if ((chicken.isHungry) && (chicken.isFeederFull))
 	{
 		return new HungryState();
 	}
 }
 
-void IdleState::Enter()
+void IdleState::Enter(Chicken& chicken)
 {
 	// WILL CONTROL GRAPHICS AT SOME POINT, ECT.
 }

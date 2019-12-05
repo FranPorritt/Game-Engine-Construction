@@ -8,23 +8,21 @@ using namespace HAPISPACE;
 
 ChickenState::ChickenState()
 {
-	isHungry = true;
-	isFeederFull = true;
 }
 
 ChickenState::~ChickenState()
 {
 }
 
-ChickenState* ChickenState::Handle()
+ChickenState* ChickenState::Handle(Chicken& chicken)
 {
 	return 0;
 }
 
-void ChickenState::Enter()
+void ChickenState::Enter(Chicken& chicken)
 {
 }
 
-void ChickenState::Update()
+void ChickenState::Update(Chicken& chicken)
 {
 }

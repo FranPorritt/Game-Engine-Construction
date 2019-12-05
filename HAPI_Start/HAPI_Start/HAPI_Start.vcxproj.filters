@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Chicken FSM">
+      <UniqueIdentifier>{d869fa5f-bc0d-47ea-ac58-a82b33a98b49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +57,15 @@
     <ClCompile Include="HungryState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EggState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransitionState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SeedBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visualisation.h">
@@ -83,16 +95,25 @@
     <ClInclude Include="Chicken.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IdleState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WanderingState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ChickenState.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Chicken FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="EggState.h">
+      <Filter>Header Files\Chicken FSM</Filter>
     </ClInclude>
     <ClInclude Include="HungryState.h">
+      <Filter>Header Files\Chicken FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="TransitionState.h">
+      <Filter>Header Files\Chicken FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="WanderingState.h">
+      <Filter>Header Files\Chicken FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>Header Files\Chicken FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="SeedBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

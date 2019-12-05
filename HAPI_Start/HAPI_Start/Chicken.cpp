@@ -11,7 +11,7 @@ Chicken::Chicken(const std::string& graphicIDArg, vector2<int> positionArg) : En
 {
 	speed = 1;
 	chickenState = new IdleState();
-	chickenRate = rand() % 300 + 600;
+	state = new IdleState();
 }
 
 Chicken::~Chicken()
@@ -20,17 +20,22 @@ Chicken::~Chicken()
 
 void Chicken::Handle()
 {
-	ChickenState* state = chickenState->Handle();
-	if (state != NULL)
+	chickenRate = rand() % 400 + 100;
+
+	state = chickenState->Handle(*this);
+	if (state != chickenState)
 	{
-		delete chickenState;
-		chickenState = state;
+		if (state != NULL)
+		{
+			delete chickenState;
+			chickenState = state;
+			chickenState->Enter(*this);
+		}
 	}
 
-	chickenState->Enter();
 }
 
 void Chicken::Direction()
 {
-	chickenState->Update();
+	chickenState->Update(*this);
 }

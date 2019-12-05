@@ -9,7 +9,7 @@ private:
 	bool hasDirection = false;
 
 public:
-	ChickenState* Handle();
-	void Enter();
+	ChickenState* Handle(Chicken& chicken);
+	void Enter(Chicken& chicken);
 	void Update(Chicken& chicken);
 };

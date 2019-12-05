@@ -18,7 +18,14 @@ void Player::Direction()
 	//  Set enum
 	if ((keyData.scanCode['W']) && (position.yPos > 180)) // MAGIC NUMBERS
 	{
-		direction = EDirection::eUp;
+		if ((position.xPos < 230) && (position.yPos < 210)) // FIND A BETTER WAY OF STOPPING PLAYER WALKING ON TOP OF OBJECTS
+		{
+			direction = EDirection::eStop;
+		}
+		else
+		{
+			direction = EDirection::eUp;
+		}
 	}
 	else if ((keyData.scanCode['S']) && (position.yPos < 560))
 	{

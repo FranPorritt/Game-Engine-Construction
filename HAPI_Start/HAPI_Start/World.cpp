@@ -1,10 +1,12 @@
-#include "World.h"
+#include <time.h>
 #include <HAPI_lib.h>
+
+#include "World.h"
 #include "Visualisation.h"
 #include "Player.h"
 #include "Chicken.h"
 #include "Environment.h"
-#include <time.h>
+#include "SeedBox.h"
 
 using namespace HAPISPACE;
 
@@ -14,7 +16,10 @@ World::World()
 
 World::~World()
 {
-	// delete entities
+	for (auto& entity : entities)
+	{
+		delete entity;
+	}
 }
 
 bool World::Initialise()
@@ -55,14 +60,21 @@ bool World::LoadLevel()
 		return false;
 	if (!m_vis->CreateSprite("Data\\fenceSide.png", "fenceRight", 1, 1))
 		return false;
+	if (!m_vis->CreateSprite("Data\\seedEmpty.png", "seedBox", 1, 1))
+		return false;
 
 	// Draw order
 	entities.push_back(new Environment("fenceBack", { 180, 176 }));
 	entities.push_back(new Environment("fenceLeft", { 191, 205 }));
 	entities.push_back(new Environment("fenceRight", { 788, 205 }));
+
+	entities.push_back(new SeedBox("seedBox", { 220, 190 }));
+
 	entities.push_back(new Player("player", { 512, 384 }));
+
 	entities.push_back(new Environment("fenceFront", { 180, 576 })); // Must be drawn after Player
-	
+
+
 	chickenEntities.push_back(new Chicken("chicken", { 560, 384 }));
 	chickenEntities.push_back(new Chicken("chicken1", { 430, 480 }));
 	chickenEntities.push_back(new Chicken("chicken2", { 650, 290 }));

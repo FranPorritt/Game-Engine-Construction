@@ -1,15 +1,15 @@
 #pragma once
 #include "ChickenState.h"
-#include <vector>
+#include "Chicken.h"
 #include "vector2.h"
 
-class HungryState :	public ChickenState
+class EggState : public ChickenState
 {
 protected:
-	vector2<int> feederPos = { 235 , 530 }; // MAKE RANGE OF SPRITE LENGTH WHEN IN
+	vector2<int> coopPos = { 740 , 200 }; // MAKE RANGE OF COOP LENGTH WHEN IN
 
-	int xFeederDistance = 0;
-	int yFeederDistance = 0;
+	int xCoopDistance = 0;
+	int yCoopDistance = 0;
 
 	bool isHeadingX = false;
 	bool isHeadingY = false;
