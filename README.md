@@ -6,4 +6,6 @@ Visualisation.cpp
 
 Sprite.cpp
 
+Chicken.cpp
+
 These are a few files in the project I feel best show my current skill level.
