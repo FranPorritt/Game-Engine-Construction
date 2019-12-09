@@ -19,7 +19,7 @@ private:
 
 public:
 	bool isHungry = true;
-	bool isFeederFull = true; // WILL BE SET BY A GETTER FROM FEEDER ENTITY
+	bool isFeederFull = false; // WILL BE SET BY A GETTER FROM FEEDER ENTITY
 
 	Chicken(const std::string& graphicIDArg, vector2<int> positionArg);
 	~Chicken();

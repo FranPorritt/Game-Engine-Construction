@@ -40,7 +40,7 @@ bool World::LoadLevel()
 		return false;
 
 	// Player Sprite
-	if (!m_vis->CreateSprite("Data\\player.png", "player", 4, 4)) // Last 2 ints for sprite sheets
+	if (!m_vis->CreateSprite("Data\\player.png", "player", 1, 1)) // Last 2 ints for sprite sheets
 		return false;
 	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken", 1, 1))
 		return false;
@@ -83,11 +83,13 @@ bool World::LoadLevel()
 	for (auto& entity : entities)
 	{
 		m_vis->CreateSourceRect(entity->GetID());
+		entity->CreateRect(m_vis->GetSpriteHeight(entity->GetID()), m_vis->GetSpriteWidth(entity->GetID()));
 	}
 
 	for (auto& chicken : chickenEntities)
 	{
 		m_vis->CreateSourceRect(chicken->GetID());
+		chicken->CreateRect(m_vis->GetSpriteHeight(chicken->GetID()), m_vis->GetSpriteWidth(chicken->GetID()));
 	}
 
 	return true;
@@ -110,8 +112,28 @@ void World::Run()
 			// Draws entities every frame
 			for (auto& entity : entities)
 			{
-				m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
+				vector2<int> currentPos = entity->GetPos();
 				entity->Update();
+
+				for (auto& entity2 : entities)
+				{
+					// Check entitys aren't same side, or some variable
+					if ((entity2 != entity) && (entity2->GetSide() != entity->GetSide())) 
+					{
+						if (entity->Collision(*entity, *entity2))
+						{
+							entity->SetPos(currentPos);
+							
+							// If colliding, check if player, check if interacting with object
+							if (entity->GetSide() == ESide::eSidePlayer)
+							{
+								entity->PlayerInteract(*entity, *entity2);
+							}
+						}
+					}
+				}
+
+				m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
 			}
 
 			for (auto& chicken : chickenEntities)
@@ -123,7 +145,7 @@ void World::Run()
 			callTime = clock();
 		}
 
-		// Controls switch between wandering and idle chicken states
+		// Controls switch between wandering and idle chicken states		
 		if (currentTime >= chickenCallTime + chickenRate)
 		{
 			for (auto& chicken : chickenEntities)
@@ -131,12 +153,9 @@ void World::Run()
 				if (currentTime >= chickenCallTime + chicken->GetRate())
 				{
 					chicken->Handle();
+					chickenCallTime = clock();
 				}
 			}
-
-			chickenCallTime = clock();
-
-			chickenRate = rand() % 200 + 600;
 		}
 	}
 }

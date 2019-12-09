@@ -2,13 +2,30 @@
 
 using namespace HAPISPACE;
 
+Player* Player::_instance{ nullptr };
+
 Player::Player(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
+	side = ESide::eSidePlayer;
 	speed = 3;
+	viewOffset = 40;
+}
+
+Player::Player()
+{
 }
 
 Player::~Player()
 {
+}
+
+Player& Player::GetInstance()
+{
+	if (_instance == nullptr)
+	{
+		_instance = new Player();
+		return *_instance;
+	}
 }
 
 void Player::Direction()
@@ -18,14 +35,7 @@ void Player::Direction()
 	//  Set enum
 	if ((keyData.scanCode['W']) && (position.yPos > 180)) // MAGIC NUMBERS
 	{
-		if ((position.xPos < 230) && (position.yPos < 210)) // FIND A BETTER WAY OF STOPPING PLAYER WALKING ON TOP OF OBJECTS
-		{
-			direction = EDirection::eStop;
-		}
-		else
-		{
-			direction = EDirection::eUp;
-		}
+		direction = EDirection::eUp;
 	}
 	else if ((keyData.scanCode['S']) && (position.yPos < 560))
 	{

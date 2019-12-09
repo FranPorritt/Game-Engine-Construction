@@ -3,6 +3,10 @@
 
 using namespace HAPISPACE;
 
+Entity::Entity()
+{
+}
+
 Entity::Entity(const std::string& graphicIDArg, vector2<int>& positionArg) : graphicID(graphicIDArg), position(positionArg)
 {
 }
@@ -50,4 +54,56 @@ void Entity::Movement()
 	default:
 		break;
 	}
+}
+
+bool Entity::Collision(Entity& entity1, Entity& entity2)
+{
+	int right1 = entity1.rect.right + entity1.position.xPos;
+	int left1 = entity1.rect.left + entity1.position.xPos;
+	int top1 = entity1.rect.top + entity1.position.yPos;
+	int bottom1 = entity1.rect.bottom + entity1.position.yPos;
+
+	int right2 = entity2.rect.right + entity2.position.xPos;
+	int left2 = entity2.rect.left + entity2.position.xPos;
+	int top2 = entity2.rect.top + entity2.position.yPos;
+	int bottom2 = entity2.rect.bottom + entity2.position.yPos;
+
+
+	if ((right1 < left2) || (left1 > right2) || (bottom1 < top2 - viewOffset) || (top1 > bottom2 - viewOffset))
+	{
+		return false; // No collision
+	}
+	else
+	{
+		return true;
+	}
+}
+
+void Entity::PlayerInteract(Entity& entity1, Entity& entity2)
+{
+	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+
+	// COLLISION TYPES:
+	// PLAYER:
+	// - SEED
+	// - FEEDER
+	// - COOP
+
+	switch (entity2.GetSide())
+	{
+	case ESide::eSideSeed:
+		if (keyData.scanCode['E'])
+		{
+
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
+void Entity::SetPos(vector2<int>& currentPos)
+{
+	position = currentPos;
 }

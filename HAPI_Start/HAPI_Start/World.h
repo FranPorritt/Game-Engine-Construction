@@ -2,6 +2,7 @@
 #include <time.h>
 #include <iostream>
 #include <vector>
+#include "vector2.h"
 
 class Visualisation;
 class Entity;
@@ -18,7 +19,7 @@ private:
 	clock_t callTime = clock(); // The time function was called
 	clock_t chickenCallTime = clock(); 
 	const double tickRate = 1000 / 60;
-	int chickenRate = rand() % 300 + 120; // Make this a random between range
+	int chickenRate = rand() % 200 + 200; // Make this a random between range
 
 public:
 	World();

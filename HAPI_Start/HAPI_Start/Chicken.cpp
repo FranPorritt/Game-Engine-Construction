@@ -9,6 +9,7 @@ using namespace HAPISPACE;
 
 Chicken::Chicken(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
+	side = ESide::eSideChicken;
 	speed = 1;
 	chickenState = new IdleState();
 	state = new IdleState();
@@ -32,7 +33,6 @@ void Chicken::Handle()
 			chickenState->Enter(*this);
 		}
 	}
-
 }
 
 void Chicken::Direction()

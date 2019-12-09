@@ -1,6 +1,7 @@
 #include "HungryState.h"
 #include "WanderingState.h"
 #include "EggState.h"
+#include "IdleState.h"
 #include "TransitionState.h"
 #include "Chicken.h"
 
@@ -17,6 +18,10 @@ ChickenState* HungryState::Handle(Chicken& chicken)
 	else if ((chicken.isHungry) && (chicken.isFeederFull))
 	{
 		return new HungryState();
+	}
+	else
+	{
+	return new IdleState();
 	}
 }
 
