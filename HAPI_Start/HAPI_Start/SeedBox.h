@@ -4,6 +4,7 @@
 class SeedBox :	public Entity
 {
 private:
+	Rectangle interactionBox;
 	int seedRate = 50;
 	int respawnRate = 10;
 	int timer = 0;
@@ -14,6 +15,7 @@ public:
 	SeedBox(const std::string& graphicIDArg, vector2<int> positionArg);
 	~SeedBox();
 
+	void CreateInteractionBox();
 	void Update();
 	void Direction();
 

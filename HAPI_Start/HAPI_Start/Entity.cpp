@@ -79,30 +79,6 @@ bool Entity::Collision(Entity& entity1, Entity& entity2)
 	}
 }
 
-void Entity::PlayerInteract(Entity& entity1, Entity& entity2)
-{
-	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
-
-	// COLLISION TYPES:
-	// PLAYER:
-	// - SEED
-	// - FEEDER
-	// - COOP
-
-	switch (entity2.GetSide())
-	{
-	case ESide::eSideSeed:
-		if (keyData.scanCode['E'])
-		{
-
-		}
-		break;
-
-	default:
-		break;
-	}
-}
-
 void Entity::SetPos(vector2<int>& currentPos)
 {
 	position = currentPos;

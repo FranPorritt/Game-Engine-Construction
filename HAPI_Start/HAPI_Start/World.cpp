@@ -1,5 +1,6 @@
 #include <time.h>
 #include <HAPI_lib.h>
+#include <assert.h>
 
 #include "World.h"
 #include "Visualisation.h"
@@ -124,10 +125,9 @@ void World::Run()
 						{
 							entity->SetPos(currentPos);
 							
-							// If colliding, check if player, check if interacting with object
 							if (entity->GetSide() == ESide::eSidePlayer)
 							{
-								entity->PlayerInteract(*entity, *entity2);
+								static_cast<Player*>(entity)->Interaction(*entity2);
 							}
 						}
 					}

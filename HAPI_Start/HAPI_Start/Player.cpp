@@ -2,8 +2,6 @@
 
 using namespace HAPISPACE;
 
-Player* Player::_instance{ nullptr };
-
 Player::Player(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
 	side = ESide::eSidePlayer;
@@ -11,21 +9,8 @@ Player::Player(const std::string& graphicIDArg, vector2<int> positionArg) : Enti
 	viewOffset = 40;
 }
 
-Player::Player()
-{
-}
-
 Player::~Player()
 {
-}
-
-Player& Player::GetInstance()
-{
-	if (_instance == nullptr)
-	{
-		_instance = new Player();
-		return *_instance;
-	}
 }
 
 void Player::Direction()
@@ -75,4 +60,27 @@ void Player::Direction()
 			direction = EDirection::eRight;
 		}
 	}
+}
+
+void Player::Interaction(Entity& entity2)
+{
+	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+
+	switch (entity2.GetSide())
+	{
+	case ESide::eSideSeed:
+		if (keyData.scanCode['E'])
+		{
+			hasSeeds = true;
+		}
+		break;
+
+		// feeder - hasSeeds = false
+
+		// coop - if hasEgg - gain point
+
+	default:
+		break;
+	}
+
 }

@@ -16,7 +16,16 @@ enum class EDirection
 enum class ESide
 {
 	eSidePlayer,	
-	eSideSeed,
+	eSideInteractable,
+	eSideChicken,
+	eSideNeutral,
+	eSideEnvironment,
+};
+
+enum class EType
+{
+	eSidePlayer,
+	eSideInteractable,
 	eSideChicken,
 	eSideNeutral,
 	eSideEnvironment,
@@ -48,7 +57,6 @@ public:
 	// Moves entity based on direction
 	void Movement();
 	bool Collision(Entity& entity1, Entity& entity2);
-	void PlayerInteract(Entity& entity1, Entity& entity2);
 	void SetPos(vector2<int>& currentPos);
 
 	vector2<int> GetPos() { return position; };
