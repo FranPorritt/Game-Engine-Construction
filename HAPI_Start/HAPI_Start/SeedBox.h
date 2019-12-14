@@ -1,10 +1,9 @@
 #pragma once
-#include "Entity.h"
+#include "Interactables.h"
 
-class SeedBox :	public Entity
+class SeedBox :	public Interactables
 {
 private:
-	Rectangle interactionBox;
 	int seedRate = 50;
 	int respawnRate = 10;
 	int timer = 0;
@@ -15,9 +14,8 @@ public:
 	SeedBox(const std::string& graphicIDArg, vector2<int> positionArg);
 	~SeedBox();
 
-	void CreateInteractionBox();
 	void Update();
-	void Direction();
+	void Interact() override final;
 
 	bool GetSeed() { return hasSeeds; };
 };

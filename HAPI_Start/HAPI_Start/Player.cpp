@@ -4,6 +4,7 @@ using namespace HAPISPACE;
 
 Player::Player(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
+	type = EType::eTypeNeutral;
 	side = ESide::eSidePlayer;
 	speed = 3;
 	viewOffset = 40;

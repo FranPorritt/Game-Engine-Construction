@@ -85,6 +85,10 @@ bool World::LoadLevel()
 	{
 		m_vis->CreateSourceRect(entity->GetID());
 		entity->CreateRect(m_vis->GetSpriteHeight(entity->GetID()), m_vis->GetSpriteWidth(entity->GetID()));
+		if (entity->GetType() == EType::eTypeInteractable)
+		{
+			static_cast<Interactables*>(entity)->CreateInteractionBox();
+		}
 	}
 
 	for (auto& chicken : chickenEntities)
@@ -103,6 +107,7 @@ void World::Run()
 
 	while (HAPI.Update())
 	{
+		const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 		currentTime = clock();
 
 		if (currentTime >= callTime + tickRate)
@@ -118,17 +123,17 @@ void World::Run()
 
 				for (auto& entity2 : entities)
 				{
-					// Check entitys aren't same side, or some variable
+					// Check entitys aren't same side
 					if ((entity2 != entity) && (entity2->GetSide() != entity->GetSide())) 
 					{
 						if (entity->Collision(*entity, *entity2))
 						{
 							entity->SetPos(currentPos);
 							
-							if (entity->GetSide() == ESide::eSidePlayer)
+							/*if (entity->GetSide() == ESide::eSidePlayer)
 							{
 								static_cast<Player*>(entity)->Interaction(*entity2);
-							}
+							}*/
 						}
 					}
 				}

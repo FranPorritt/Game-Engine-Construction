@@ -66,6 +66,12 @@
     <ClCompile Include="SeedBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Interactables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NOTES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visualisation.h">
@@ -114,6 +120,9 @@
       <Filter>Header Files\Chicken FSM</Filter>
     </ClInclude>
     <ClInclude Include="SeedBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

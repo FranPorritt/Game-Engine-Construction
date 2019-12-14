@@ -16,19 +16,17 @@ enum class EDirection
 enum class ESide
 {
 	eSidePlayer,	
-	eSideInteractable,
+	eSideSeed,
 	eSideChicken,
 	eSideNeutral,
-	eSideEnvironment,
 };
 
 enum class EType
 {
-	eSidePlayer,
-	eSideInteractable,
-	eSideChicken,
-	eSideNeutral,
-	eSideEnvironment,
+	eTypeInteractable,
+	eTypeAI,
+	eTypeNeutral,
+	eTypeEnvironment,
 };
 
 class Entity
@@ -42,6 +40,7 @@ protected:
 	int viewOffset = 0;
 	bool activeFlag = false;
 	ESide side = ESide::eSideNeutral;
+	EType type = EType::eTypeNeutral;
 
 public:
 	EDirection direction = EDirection::eStop;
@@ -56,12 +55,13 @@ public:
 	virtual void Direction() = 0;
 	// Moves entity based on direction
 	void Movement();
-	bool Collision(Entity& entity1, Entity& entity2);
+	virtual bool Collision(Entity& entity1, Entity& entity2);
 	void SetPos(vector2<int>& currentPos);
 
-	vector2<int> GetPos() { return position; };
-	Rectangle GetRect() { return rect; };
-	std::string GetID() { return graphicID; };
-	ESide GetSide() { return side; };
+	vector2<int> GetPos() const { return position; };
+	Rectangle GetRect() const { return rect; };
+	std::string GetID() const { return graphicID; };
+	ESide GetSide() const { return side; };
+	EType GetType() const { return type; };
 };
 

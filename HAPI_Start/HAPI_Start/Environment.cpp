@@ -2,7 +2,8 @@
 
 Environment::Environment(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(graphicIDArg, positionArg)
 {
-	side = ESide::eSideEnvironment;
+	side = ESide::eSideNeutral;
+	type = EType::eTypeEnvironment;
 }
 
 Environment::~Environment()

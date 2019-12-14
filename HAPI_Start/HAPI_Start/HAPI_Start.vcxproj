@@ -26,12 +26,14 @@
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="HungryState.cpp" />
     <ClCompile Include="IdleState.cpp" />
+    <ClCompile Include="Interactables.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="NOTES.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="SeedBox.cpp" />
@@ -49,6 +51,7 @@
     <ClInclude Include="Environment.h" />
     <ClInclude Include="HungryState.h" />
     <ClInclude Include="IdleState.h" />
+    <ClInclude Include="Interactables.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="SeedBox.h" />
