@@ -14,8 +14,11 @@ public:
 	SeedBox(const std::string& graphicIDArg, vector2<int> positionArg);
 	~SeedBox();
 
-	void Update();
-	void Interact() override final;
+	void CreateInteractionBox() override final;
+	void Update() override final;
 
-	bool GetSeed() { return hasSeeds; };
+	const bool InteractButtonPressed() override final { return isPlayerColliding; };
+
+	const bool GetSeed() { return hasSeeds; };
+	void SetSeedFalse() { hasSeeds = false; };
 };

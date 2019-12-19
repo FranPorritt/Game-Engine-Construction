@@ -19,6 +19,7 @@ enum class ESide
 	eSideSeed,
 	eSideChicken,
 	eSideNeutral,
+	eSideFeeder,
 };
 
 enum class EType
@@ -50,7 +51,7 @@ public:
 	~Entity();
 
 	void CreateRect(int spriteHeight, int spriteWidth);
-	void Update();
+	virtual void Update();
 	// Sets direction based on user input or ai
 	virtual void Direction() = 0;
 	// Moves entity based on direction

@@ -13,7 +13,6 @@ public:
 	~Player();
 
 	void Direction() override final;
-	void Interaction(Entity& entity2);
 
 	void SetSeedsTrue() { hasSeeds = true; };
 	void SetSeedsFalse() { hasSeeds = false; };

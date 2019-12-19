@@ -12,10 +12,10 @@ public:
 	Interactables(const std::string& graphicIDArg, vector2<int> positionArg);
 	~Interactables();
 
-	void CreateInteractionBox();
+	virtual void CreateInteractionBox() = 0;
 	void Direction() override final;
 	// Only called when player has pressed interaction button
-	virtual void Interact() = 0;
+	virtual const bool InteractButtonPressed() = 0;
 	bool Collision(Entity& entity1, Entity& entity2) override final;
 };
 

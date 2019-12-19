@@ -24,6 +24,7 @@
     <ClCompile Include="EggState.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Environment.cpp" />
+    <ClCompile Include="Feeder.cpp" />
     <ClCompile Include="HungryState.cpp" />
     <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="Interactables.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="EggState.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Environment.h" />
+    <ClInclude Include="Feeder.h" />
     <ClInclude Include="HungryState.h" />
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="Interactables.h" />

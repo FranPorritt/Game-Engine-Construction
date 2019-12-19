@@ -8,6 +8,8 @@
 #include "Chicken.h"
 #include "Environment.h"
 #include "SeedBox.h"
+#include "Feeder.h"
+#include "Interactables.h"
 
 using namespace HAPISPACE;
 
@@ -17,9 +19,14 @@ World::World()
 
 World::~World()
 {
-	for (auto& entity : entities)
+	for (auto& entity : m_entities)
 	{
 		delete entity;
+	}
+
+	for (auto& chicken : m_chickenEntities)
+	{
+		delete chicken;
 	}
 }
 
@@ -63,25 +70,24 @@ bool World::LoadLevel()
 		return false;
 	if (!m_vis->CreateSprite("Data\\seedEmpty.png", "seedBox", 1, 1))
 		return false;
+	if (!m_vis->CreateSprite("Data\\feederFull.png", "feeder", 1, 1))
+		return false;
 
 	// Draw order
-	entities.push_back(new Environment("fenceBack", { 180, 176 }));
-	entities.push_back(new Environment("fenceLeft", { 191, 205 }));
-	entities.push_back(new Environment("fenceRight", { 788, 205 }));
+	m_entities.push_back(new Environment("fenceBack", { 180, 176 }));
+	m_entities.push_back(new Environment("fenceLeft", { 191, 205 }));
+	m_entities.push_back(new Environment("fenceRight", { 788, 205 }));
+	m_entities.push_back(new SeedBox("seedBox", { 220, 190 })); 
+	m_entities.push_back(new Player("player", { 512, 384 }));
+	m_entities.push_back(new Feeder("feeder", { 220, 550 }));
+	m_entities.push_back(new Environment("fenceFront", { 180, 576 })); // Must be drawn after Player
 
-	entities.push_back(new SeedBox("seedBox", { 220, 190 }));
+	m_chickenEntities.push_back(new Chicken("chicken", { 560, 384 }));
+	m_chickenEntities.push_back(new Chicken("chicken1", { 430, 480 }));
+	m_chickenEntities.push_back(new Chicken("chicken2", { 650, 290 }));
+	m_chickenEntities.push_back(new Chicken("chicken3", { 390, 384 }));
 
-	entities.push_back(new Player("player", { 512, 384 }));
-
-	entities.push_back(new Environment("fenceFront", { 180, 576 })); // Must be drawn after Player
-
-
-	chickenEntities.push_back(new Chicken("chicken", { 560, 384 }));
-	chickenEntities.push_back(new Chicken("chicken1", { 430, 480 }));
-	chickenEntities.push_back(new Chicken("chicken2", { 650, 290 }));
-	chickenEntities.push_back(new Chicken("chicken3", { 390, 384 }));
-
-	for (auto& entity : entities)
+	for (auto& entity : m_entities)
 	{
 		m_vis->CreateSourceRect(entity->GetID());
 		entity->CreateRect(m_vis->GetSpriteHeight(entity->GetID()), m_vis->GetSpriteWidth(entity->GetID()));
@@ -91,7 +97,7 @@ bool World::LoadLevel()
 		}
 	}
 
-	for (auto& chicken : chickenEntities)
+	for (auto& chicken : m_chickenEntities)
 	{
 		m_vis->CreateSourceRect(chicken->GetID());
 		chicken->CreateRect(m_vis->GetSpriteHeight(chicken->GetID()), m_vis->GetSpriteWidth(chicken->GetID()));
@@ -109,6 +115,11 @@ void World::Run()
 	{
 		const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 		currentTime = clock();
+		
+		if (keyData.scanCode['E'])
+		{
+			Interaction();
+		}
 
 		if (currentTime >= callTime + tickRate)
 		{
@@ -116,24 +127,22 @@ void World::Run()
 			m_vis->DrawBackgroundSprite("background", 0, 0);
 
 			// Draws entities every frame
-			for (auto& entity : entities)
+			for (auto& entity : m_entities)
 			{
 				vector2<int> currentPos = entity->GetPos();
 				entity->Update();
 
-				for (auto& entity2 : entities)
+				for (auto& entity2 : m_entities)
 				{
 					// Check entitys aren't same side
-					if ((entity2 != entity) && (entity2->GetSide() != entity->GetSide())) 
+					if ((entity2 != entity) && (entity2->GetSide() != entity->GetSide()))
 					{
 						if (entity->Collision(*entity, *entity2))
 						{
-							entity->SetPos(currentPos);
-							
-							/*if (entity->GetSide() == ESide::eSidePlayer)
+							if ((entity->GetType() != EType::eTypeEnvironment) && (entity2->GetType() != EType::eTypeEnvironment))
 							{
-								static_cast<Player*>(entity)->Interaction(*entity2);
-							}*/
+								entity->SetPos(currentPos);
+							}
 						}
 					}
 				}
@@ -141,7 +150,7 @@ void World::Run()
 				m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
 			}
 
-			for (auto& chicken : chickenEntities)
+			for (auto& chicken : m_chickenEntities)
 			{
 				m_vis->DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
 				chicken->Movement();
@@ -153,7 +162,7 @@ void World::Run()
 		// Controls switch between wandering and idle chicken states		
 		if (currentTime >= chickenCallTime + chickenRate)
 		{
-			for (auto& chicken : chickenEntities)
+			for (auto& chicken : m_chickenEntities)
 			{
 				if (currentTime >= chickenCallTime + chicken->GetRate())
 				{
@@ -161,6 +170,48 @@ void World::Run()
 					chickenCallTime = clock();
 				}
 			}
+		}
+	}
+}
+
+void World::Interaction()
+{
+	for (auto& interactable : m_entities)
+	{
+		if (interactable->GetType() == EType::eTypeInteractable)
+		{
+			if (static_cast<Interactables*>(interactable)->InteractButtonPressed()) // Checks if player is trying to interact with this object
+			{
+				// Which object determines response.
+				switch (interactable->GetSide())
+				{
+				case ESide::eSideSeed:
+					if (static_cast<SeedBox*>(interactable)->GetSeed()) // Checks seeder has seed available
+					{
+						static_cast<SeedBox*>(interactable)->SetSeedFalse(); // Empties seed box
+						SeedInteract(); // Gives player seeds
+					}
+					break;
+
+					// side::feeder
+					// feederHasSeeds = true
+					// player hasSeeds = false
+
+				default:
+					break;
+				}
+			}
+		}
+	}
+}
+
+void World::SeedInteract()
+{
+	for (auto& entity : m_entities)
+	{
+		if (entity->GetSide() == ESide::eSidePlayer)
+		{
+			static_cast<Player*>(entity)->SetSeedsTrue();
 		}
 	}
 }

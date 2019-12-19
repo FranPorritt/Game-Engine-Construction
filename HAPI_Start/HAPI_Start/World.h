@@ -7,13 +7,14 @@
 class Visualisation;
 class Entity;
 class Chicken;
+class Interactables;
 
 class World
 {
 private:
 	std::shared_ptr<Visualisation> m_vis;
-	std::vector <Entity*> entities; // maybe make map??
-	std::vector <Chicken*> chickenEntities;
+	std::vector <Entity*> m_entities; // maybe make map??
+	std::vector <Chicken*> m_chickenEntities;
 
 	clock_t currentTime = clock();
 	clock_t callTime = clock(); // The time function was called
@@ -28,5 +29,8 @@ public:
 	bool Initialise();
 	bool LoadLevel();
 	void Run();
+
+	void Interaction();
+	void SeedInteract();
 };
 

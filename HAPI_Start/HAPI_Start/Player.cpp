@@ -62,26 +62,3 @@ void Player::Direction()
 		}
 	}
 }
-
-void Player::Interaction(Entity& entity2)
-{
-	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
-
-	switch (entity2.GetSide())
-	{
-	case ESide::eSideSeed:
-		if (keyData.scanCode['E'])
-		{
-			hasSeeds = true;
-		}
-		break;
-
-		// feeder - hasSeeds = false
-
-		// coop - if hasEgg - gain point
-
-	default:
-		break;
-	}
-
-}

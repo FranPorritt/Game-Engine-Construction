@@ -10,14 +10,6 @@ Interactables::~Interactables()
 {
 }
 
-void Interactables::CreateInteractionBox()
-{
-	interactionBox.top = rect.bottom / 2; // Halfway up seed box sprite
-	interactionBox.bottom = rect.bottom + interactionBox.top; // Goes belowe sprite
-	interactionBox.left = rect.left;
-	interactionBox.right = rect.right;
-}
-
 void Interactables::Direction()
 {
 	direction = EDirection::eStop;
@@ -38,7 +30,10 @@ bool Interactables::Collision(Entity& entity1, Entity& entity2)
 
 	if ((right1 < left2) || (left1 > right2) || (bottom1 < top2 - viewOffset) || (top1 > bottom2 - viewOffset))
 	{
-		isPlayerColliding = false;
+		if (entity2.GetSide() == ESide::eSidePlayer)
+		{
+			isPlayerColliding = false;
+		}
 
 		return false; // No collision
 	}

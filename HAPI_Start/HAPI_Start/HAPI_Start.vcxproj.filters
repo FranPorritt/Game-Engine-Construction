@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Chicken FSM">
       <UniqueIdentifier>{d869fa5f-bc0d-47ea-ac58-a82b33a98b49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Chicken FSM">
+      <UniqueIdentifier>{2558d83c-10d8-4fa8-9acd-b9bcbf07b7ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,24 +48,6 @@
     <ClCompile Include="Chicken.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IdleState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WanderingState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChickenState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HungryState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EggState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TransitionState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SeedBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -71,6 +56,27 @@
     </ClCompile>
     <ClCompile Include="NOTES.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Feeder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChickenState.cpp">
+      <Filter>Source Files\Chicken FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="EggState.cpp">
+      <Filter>Source Files\Chicken FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HungryState.cpp">
+      <Filter>Source Files\Chicken FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleState.cpp">
+      <Filter>Source Files\Chicken FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="TransitionState.cpp">
+      <Filter>Source Files\Chicken FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="WanderingState.cpp">
+      <Filter>Source Files\Chicken FSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Interactables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Feeder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
