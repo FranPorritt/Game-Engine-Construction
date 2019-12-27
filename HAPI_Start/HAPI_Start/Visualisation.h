@@ -29,6 +29,7 @@ public:
 	void CreateSourceRect(const string& filename);
 	void DrawBackgroundSprite(const string& name, int spriteX, int spriteY); // Doesn't check for clipping, improves framerate
 	void DrawSprite(const string& name, int spriteX, int spriteY);
+	void DrawTimerSprite(const string& name, int spriteX, int spriteY, int timerPercent);
 
 	int GetScreenWidth() const { return screenWidth; }
 	int GetScreenHeight() const { return screenHeight; }

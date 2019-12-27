@@ -21,7 +21,7 @@ Chicken::~Chicken()
 
 void Chicken::Handle()
 {
-	chickenRate = rand() % 400 + 100;
+	chickenRate = rand() % 250 + 100;
 
 	state = chickenState->Handle(*this);
 	if (state != chickenState)
@@ -38,4 +38,9 @@ void Chicken::Handle()
 void Chicken::Direction()
 {
 	chickenState->Update(*this);
+}
+
+void Chicken::Eat()
+{
+	isChickenEating = true;
 }

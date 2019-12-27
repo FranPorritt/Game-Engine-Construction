@@ -73,6 +73,18 @@ void Visualisation::DrawSprite(const string& name, int spriteX, int spriteY)
 	spriteMap[name]->ClipBlit(spriteX, spriteY, screen, destRect);
 }
 
+void Visualisation::DrawTimerSprite(const string& name, int spriteX, int spriteY, int timerPercent)
+{
+#if defined(__DEBUG)
+	if (spriteMap.find(name) == spriteMap.end())
+	{
+		cerr << "uh oh, spaghetti-o" << endl;
+	}
+#endif
+
+	spriteMap[name]->TimerClipBlit(spriteX, spriteY, screen, screenWidth, screenHeight, timerPercent);
+}
+
 int Visualisation::GetSpriteWidth(const string& name) const
 {
 	return spriteMap.at(name)->GetSpriteWidth();

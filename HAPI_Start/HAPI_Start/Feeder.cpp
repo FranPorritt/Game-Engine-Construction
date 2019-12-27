@@ -8,18 +8,31 @@ Feeder::Feeder(const std::string& graphicIDArg, vector2<int> positionArg) : Inte
 
 Feeder::~Feeder()
 {
-}
-
-void Feeder::CreateInteractionBox()
-{
-	interactionBox.top = 0 - (rect.bottom / 2);
-	interactionBox.bottom = rect.bottom;
-	interactionBox.left = rect.left;
-	interactionBox.right = rect.right;
+	delete this;
 }
 
 void Feeder::Update()
 {
 	// once 2 chickens have interacted -- not full
 	// ie. health = 2, chicken eat - 1 health, if health = 0, not full
+}
+
+void Feeder::Eat()
+{
+	if (seedHealth == 0)
+	{
+		std::cout << "NO SEEDS" << std::endl;
+		hasSeeds = false;
+	}
+	else
+	{
+		seedHealth--;
+	}
+}
+
+void Feeder::SetSeedTrue()
+{
+	hasSeeds = true; 
+	seedHealth = 2;
+	std::cout << "FEEDER has seeds" << std::endl;
 }

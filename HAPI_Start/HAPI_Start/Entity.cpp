@@ -68,14 +68,27 @@ bool Entity::Collision(Entity& entity1, Entity& entity2)
 	int top2 = entity2.rect.top + entity2.position.yPos;
 	int bottom2 = entity2.rect.bottom + entity2.position.yPos;
 
-
-	if ((right1 < left2) || (left1 > right2) || (bottom1 < top2 - viewOffset) || (top1 > bottom2 - viewOffset))
+	if (top2 < 384) // Top half of screen
 	{
-		return false; // No collision
+		if ((right1 < left2) || (left1 > right2) || (bottom1 < top2 - viewOffset) || (top1 > bottom2 - viewOffset))
+		{
+			return false; // No collision
+		}
+		else
+		{
+			return true;
+		}
 	}
-	else
+	else // Bottom half of screen
 	{
-		return true;
+		if ((right1 < left2) || (left1 > right2) || (bottom1 < top2 + (viewOffset / 2)) || (top1 > bottom2 + (viewOffset / 2)))
+		{
+			return false; // No collision
+		}
+		else
+		{
+			return true;
+		}
 	}
 }
 

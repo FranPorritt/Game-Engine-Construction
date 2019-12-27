@@ -131,3 +131,42 @@ void Sprite::ClipBlit(int& spriteX, int& spriteY, BYTE* screen, Rectangle& destR
 		}
 	}
 }
+
+void Sprite::TimerClipBlit(int spriteX, int spriteY, BYTE* screen, int screenWidth, int screenHeight, int timerPercent)
+{
+	int offset = (spriteY * screenWidth + spriteX) * 4;
+
+	BYTE* screenPntr = screen + offset;
+	BYTE* texturePntr = data;
+
+	int endOfLineScreenIncrement = (screenWidth - (spriteWidth * timerPercent)) * 4;
+
+	for (int y = 0; y < spriteHeight; y++)
+	{
+		for (int x = 0; x < (spriteWidth * timerPercent); x++)
+		{
+			BYTE blue = texturePntr[0];
+			BYTE green = texturePntr[1];
+			BYTE red = texturePntr[2];
+			BYTE alpha = texturePntr[3];
+
+			// Handles alpha special cases
+			if (alpha == 255)
+			{
+				screenPntr[0] = blue;
+				screenPntr[1] = green;
+				screenPntr[2] = red;
+			}
+			else if (alpha > 0)
+			{
+				screenPntr[0] = screenPntr[0] + ((alpha * (blue - screenPntr[0])) >> 8);
+				screenPntr[1] = screenPntr[1] + ((alpha * (green - screenPntr[1])) >> 8);
+				screenPntr[2] = screenPntr[2] + ((alpha * (red - screenPntr[2])) >> 8);
+			}
+
+			screenPntr += 4;
+			texturePntr += 4;
+		}
+		screenPntr += endOfLineScreenIncrement;
+	}
+}

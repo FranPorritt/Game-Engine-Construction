@@ -14,6 +14,7 @@ public:
 
 	void Direction() override final;
 
-	void SetSeedsTrue() { hasSeeds = true; };
-	void SetSeedsFalse() { hasSeeds = false; };
+	void SetSeeds(const int& value) { hasSeeds = value; std::cout << "PLAYER seeds" << value << std::endl; };
+
+	bool GetSeeds() { return hasSeeds; };
 };

@@ -6,7 +6,7 @@
 class HungryState :	public ChickenState
 {
 protected:
-	vector2<int> feederPos = { 235 , 530 }; // MAKE RANGE OF SPRITE LENGTH WHEN IN
+	vector2<int> feederPos = { (rand()% 96 + 220) , 530 }; // MAKE RANGE OF SPRITE LENGTH WHEN IN
 
 	int xFeederDistance = 0;
 	int yFeederDistance = 0;

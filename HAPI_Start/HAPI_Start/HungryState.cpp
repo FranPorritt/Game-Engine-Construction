@@ -7,6 +7,8 @@
 
 ChickenState* HungryState::Handle(Chicken& chicken)
 {
+	feederPos.xPos = (rand() % 96 + 220);
+
 	if ((chicken.isHungry) && (!chicken.isFeederFull))
 	{
 		return new WanderingState();
@@ -21,13 +23,12 @@ ChickenState* HungryState::Handle(Chicken& chicken)
 	}
 	else
 	{
-	return new IdleState();
+		return new IdleState();
 	}
 }
 
 void HungryState::Enter(Chicken& chicken)
 {
-	// WILL CONTROL GRAPHICS AT SOME POINT, ECT.
 }
 
 void HungryState::Update(Chicken& chicken)
@@ -50,8 +51,10 @@ void HungryState::Direction(Chicken& chicken)
 
 	if ((xFeederDistance <= 3) && (yFeederDistance <= 3))
 	{
-		chicken.isHungry = false; // CHANGE TO EATSTATE ONCE IMPLEMENTED
+		chicken.isHungry = false;
 		chicken.direction = EDirection::eStop;
+		chicken.Eat();
+		Handle(chicken);
 	}
 	else
 	{

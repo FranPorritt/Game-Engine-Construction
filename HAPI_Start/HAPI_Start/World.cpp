@@ -19,6 +19,11 @@ World::World()
 
 World::~World()
 {
+	delete& m_vis;
+	delete& player;
+	delete& feeder;
+	delete& seedBox;
+
 	for (auto& entity : m_entities)
 	{
 		delete entity;
@@ -27,6 +32,29 @@ World::~World()
 	for (auto& chicken : m_chickenEntities)
 	{
 		delete chicken;
+	}
+
+	//delete this;
+}
+
+void World::Update()
+{
+	switch (currentState)
+	{
+	case GameState::eMenu:
+		MainMenu();
+		break;
+
+	case GameState::ePlay:
+		Play();
+		break;
+
+	case GameState::eQuit:
+		Exit();
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -38,13 +66,21 @@ bool World::Initialise()
 
 	HAPI.SetShowFPS(true);
 
+	gameTimer = CLOCKS_PER_SEC * levelTime;
+
 	return true;
 }
 
 bool World::LoadLevel()
 {
+	if (!m_vis->CreateSprite("Data\\menu.png", "menuPage", 1, 1))
+		return false;
+
 	// Background Sprite
 	if (!m_vis->CreateSprite("Data\\environment.png", "background", 1, 1)) // BACKGROUND MAKE ENTITY
+		return false;
+	// Timer Sprite
+	if (!m_vis->CreateSprite("Data\\timer.png", "timer", 1, 1))
 		return false;
 
 	// Player Sprite
@@ -73,13 +109,19 @@ bool World::LoadLevel()
 	if (!m_vis->CreateSprite("Data\\feederFull.png", "feeder", 1, 1))
 		return false;
 
+	// UI
+	if (!m_vis->CreateSprite("Data\\Text\\timesup.png", "timesUpText", 1, 1))
+		return false;
+
+	//ui.push_back("timesUpText");
+
 	// Draw order
 	m_entities.push_back(new Environment("fenceBack", { 180, 176 }));
 	m_entities.push_back(new Environment("fenceLeft", { 191, 205 }));
 	m_entities.push_back(new Environment("fenceRight", { 788, 205 }));
-	m_entities.push_back(new SeedBox("seedBox", { 220, 190 })); 
+	m_entities.push_back(new SeedBox("seedBox", { 220, 190 }));
 	m_entities.push_back(new Player("player", { 512, 384 }));
-	m_entities.push_back(new Feeder("feeder", { 220, 550 }));
+	m_entities.push_back(new Feeder("feeder", { 220, 570 }));
 	m_entities.push_back(new Environment("fenceFront", { 180, 576 })); // Must be drawn after Player
 
 	m_chickenEntities.push_back(new Chicken("chicken", { 560, 384 }));
@@ -91,9 +133,18 @@ bool World::LoadLevel()
 	{
 		m_vis->CreateSourceRect(entity->GetID());
 		entity->CreateRect(m_vis->GetSpriteHeight(entity->GetID()), m_vis->GetSpriteWidth(entity->GetID()));
-		if (entity->GetType() == EType::eTypeInteractable)
+
+		if (entity->GetSide() == ESide::eSidePlayer)
 		{
-			static_cast<Interactables*>(entity)->CreateInteractionBox();
+			player = entity;
+		}
+		else if (entity->GetSide() == ESide::eSideSeed)
+		{
+			seedBox = entity;
+		}
+		else if (entity->GetSide() == ESide::eSideFeeder)
+		{
+			feeder = entity;
 		}
 	}
 
@@ -108,70 +159,149 @@ bool World::LoadLevel()
 
 void World::Run()
 {
+	while (HAPI.Update())
+	{
+		Update();
+	}
+}
+
+void World::MainMenu()
+{
 	HAPI_TColour clearScreenCol = HAPI_TColour::BLACK;
 	m_vis->ClearToColour(clearScreenCol);
 
-	while (HAPI.Update())
+	while ((HAPI.Update()) && (currentState == GameState::eMenu))
+	{
+		const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+
+		m_vis->DrawBackgroundSprite("menuPage", 0, 0);
+
+		if (keyData.scanCode['1'])
+		{
+			currentState = GameState::ePlay;
+		}
+		else if (keyData.scanCode['2'])
+		{
+			HAPI.Close();
+			// Doesn't delete stuff - causing memory leaks :(
+		}
+	}
+}
+
+void World::Play()
+{
+	gameStartTime = clock(); // Gets clock value when game starts, minus from currentTime for game timer
+
+	HAPI_TColour clearScreenCol = HAPI_TColour::BLACK;
+	m_vis->ClearToColour(clearScreenCol);
+
+	while ((HAPI.Update()) && (currentState == GameState::ePlay))
 	{
 		const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 		currentTime = clock();
-		
-		if (keyData.scanCode['E'])
-		{
-			Interaction();
-		}
 
-		if (currentTime >= callTime + tickRate)
+		if (!timesUp)
 		{
-			m_vis->ClearToColour(clearScreenCol);
-			m_vis->DrawBackgroundSprite("background", 0, 0);
-
-			// Draws entities every frame
-			for (auto& entity : m_entities)
+			if (keyData.scanCode['E'])
 			{
-				vector2<int> currentPos = entity->GetPos();
-				entity->Update();
+				Interaction();
+			}
 
-				for (auto& entity2 : m_entities)
+			if (currentTime >= callTime + tickRate)
+			{
+				m_vis->ClearToColour(clearScreenCol);
+				m_vis->DrawBackgroundSprite("background", 0, 0);
+				//m_vis->DrawTimerSprite("timer", 220, 175, static_cast<SeedBox*>(seedBox)->GetTimerPercent());
+
+				// Draws entities every frame
+				for (auto& entity : m_entities)
 				{
-					// Check entitys aren't same side
-					if ((entity2 != entity) && (entity2->GetSide() != entity->GetSide()))
+					vector2<int> currentPos = entity->GetPos();
+					entity->Update();
+
+					for (auto& entity2 : m_entities)
 					{
-						if (entity->Collision(*entity, *entity2))
+						// Check entitys aren't same side
+						if ((entity2 != entity) && (entity2->GetSide() != entity->GetSide()))
 						{
-							if ((entity->GetType() != EType::eTypeEnvironment) && (entity2->GetType() != EType::eTypeEnvironment))
+							if (entity->Collision(*entity, *entity2))
 							{
-								entity->SetPos(currentPos);
+								if ((entity->GetType() != EType::eTypeEnvironment) && (entity2->GetType() != EType::eTypeEnvironment))
+								{
+									entity->SetPos(currentPos);
+								}
 							}
 						}
 					}
+
+					m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
+
 				}
 
+				for (auto& chicken : m_chickenEntities)
+				{
+					m_vis->DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
+					chicken->Movement();
+
+					if (chicken->GetEating())
+					{
+						static_cast<Feeder*>(feeder)->Eat();
+						chicken->SetEating();
+					}
+
+					// Immediately calls new state when circumstances change - ie. food all gone, chickens stopping heading for it
+					chicken->isFeederFull = static_cast<Feeder*>(feeder)->GetSeed();
+					if (chicken->isFeederFull != chicken->lastFeederState)
+					{
+						chicken->Handle();
+						chicken->lastFeederState = chicken->isFeederFull;
+					}
+				}
+
+				callTime = clock();
+			}
+
+			// Controls switch between wandering and idle chicken states		
+			if (currentTime >= chickenCallTime + chickenRate)
+			{
+				for (auto& chicken : m_chickenEntities)
+				{
+					if (currentTime >= chickenCallTime + chicken->GetRate())
+					{
+						chicken->isFeederFull = static_cast<Feeder*>(feeder)->GetSeed();
+						chicken->lastFeederState = chicken->isFeederFull;
+
+						chicken->Handle();
+						chickenCallTime = clock();
+					}
+				}
+			}
+		}
+		else
+		{
+			for (auto& entity : m_entities)
+			{
 				m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
 			}
 
 			for (auto& chicken : m_chickenEntities)
 			{
 				m_vis->DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
-				chicken->Movement();
 			}
-
-			callTime = clock();
 		}
 
-		// Controls switch between wandering and idle chicken states		
-		if (currentTime >= chickenCallTime + chickenRate)
+		if ((currentTime - gameStartTime) >= gameTimer)
 		{
-			for (auto& chicken : m_chickenEntities)
-			{
-				if (currentTime >= chickenCallTime + chicken->GetRate())
-				{
-					chicken->Handle();
-					chickenCallTime = clock();
-				}
-			}
+			m_vis->DrawSprite("timesUpText", 312, 309);
+			timesUp = true;
+			std::cout << "TIME'S UP" << std::endl;
 		}
 	}
+}
+
+void World::Exit()
+{
+
 }
 
 void World::Interaction()
@@ -188,14 +318,24 @@ void World::Interaction()
 				case ESide::eSideSeed:
 					if (static_cast<SeedBox*>(interactable)->GetSeed()) // Checks seeder has seed available
 					{
-						static_cast<SeedBox*>(interactable)->SetSeedFalse(); // Empties seed box
-						SeedInteract(); // Gives player seeds
+						static_cast<SeedBox*>(interactable)->SetSeedFalse(); // 'Empties' seed box
+						SeedInteract(1); // Gives player seeds
 					}
 					break;
 
-					// side::feeder
-					// feederHasSeeds = true
-					// player hasSeeds = false
+				case ESide::eSideFeeder:
+					if (static_cast<Player*>(player)->GetSeeds()) // Checks player has seeds
+					{
+						static_cast<Feeder*>(interactable)->SetSeedTrue(); // 'Fills' feeder
+						SeedInteract(0); // Takes players seeds
+
+						for (auto& chicken : m_chickenEntities)
+						{
+							chicken->isFeederFull = static_cast<Feeder*>(feeder)->GetSeed();
+							chicken->Handle();
+						}
+					}
+					break;
 
 				default:
 					break;
@@ -205,13 +345,7 @@ void World::Interaction()
 	}
 }
 
-void World::SeedInteract()
+void World::SeedInteract(const int& value)
 {
-	for (auto& entity : m_entities)
-	{
-		if (entity->GetSide() == ESide::eSidePlayer)
-		{
-			static_cast<Player*>(entity)->SetSeedsTrue();
-		}
-	}
+	static_cast<Player*>(player)->SetSeeds(value);
 }

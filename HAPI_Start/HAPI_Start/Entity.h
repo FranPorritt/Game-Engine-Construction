@@ -34,7 +34,7 @@ class Entity
 {
 protected:
 	Rectangle rect;
-	const std::string graphicID = NULL;
+	const std::string graphicID = nullptr;
 	vector2<int> position = { 0,0 };
 	int speed = 0;
 	int health = 0;
