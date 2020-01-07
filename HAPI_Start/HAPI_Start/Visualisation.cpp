@@ -1,6 +1,18 @@
 #include "Visualisation.h"
 #include "Sprite.h"
 
+Visualisation* Visualisation::_instance{ nullptr };
+
+Visualisation& Visualisation::GetInstance()
+{
+	if (_instance == nullptr)
+	{
+		_instance = new Visualisation;
+	}
+
+	return *_instance;
+}
+
 Visualisation::Visualisation()
 {
 	screenWidth = 1024;
@@ -73,7 +85,7 @@ void Visualisation::DrawSprite(const string& name, int spriteX, int spriteY)
 	spriteMap[name]->ClipBlit(spriteX, spriteY, screen, destRect);
 }
 
-void Visualisation::DrawTimerSprite(const string& name, int spriteX, int spriteY, int timerPercent)
+void Visualisation::DrawTimerSprite(const string& name, int spriteX, int spriteY, float timerPercent)
 {
 #if defined(__DEBUG)
 	if (spriteMap.find(name) == spriteMap.end())

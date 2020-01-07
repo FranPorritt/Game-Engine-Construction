@@ -6,6 +6,8 @@ class Player : public Entity
 private:
 	Player();
 
+	EDirection lastDirection = EDirection::eStop;
+
 	bool hasSeeds = false;
 
 public:
@@ -16,5 +18,6 @@ public:
 
 	void SetSeeds(const int& value) { hasSeeds = value; std::cout << "PLAYER seeds" << value << std::endl; };
 
-	bool GetSeeds() { return hasSeeds; };
+	EDirection GetLastDir() const { return direction; };
+	bool GetSeeds() const { return hasSeeds; };
 };

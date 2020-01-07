@@ -7,22 +7,27 @@
 
 ChickenState* HungryState::Handle(Chicken& chicken)
 {
-	feederPos.xPos = (rand() % 96 + 220);
+	feederPos.xPos = (rand() % 96 + 220); // Width of sprite
+	chicken.SetSpeed(2);
 
 	if ((chicken.isHungry) && (!chicken.isFeederFull))
 	{
+		chicken.SetSpeed(1);
 		return new WanderingState();
 	}
 	else if (!chicken.isHungry)
 	{
+		chicken.SetSpeed(1);
 		return new TransitionState();
 	}
 	else if ((chicken.isHungry) && (chicken.isFeederFull))
 	{
+		chicken.SetSpeed(3);
 		return new HungryState();
 	}
 	else
 	{
+		chicken.SetSpeed(1);
 		return new IdleState();
 	}
 }
@@ -54,7 +59,7 @@ void HungryState::Direction(Chicken& chicken)
 		chicken.isHungry = false;
 		chicken.direction = EDirection::eStop;
 		chicken.Eat();
-		Handle(chicken);
+		chicken.Handle();
 	}
 	else
 	{

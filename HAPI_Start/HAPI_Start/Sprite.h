@@ -29,7 +29,7 @@ public:
 	void CreateRect();
 	void Render(int spriteX, int spriteY, BYTE* screen, int screenWidth, int screenHeight);
 	void ClipBlit(int& spriteX, int& spriteY, BYTE* screen, Rectangle& destRect);
-	void TimerClipBlit(int spriteX, int spriteY, BYTE* screen, int screenWidth, int screenHeight, int timerPercent);
+	void TimerClipBlit(int spriteX, int spriteY, BYTE* screen, int screenWidth, int screenHeight, float& timerPercent);
 
 	int GetSpriteWidth() const { return spriteWidth; }
 	int GetSpriteHeight() const { return spriteHeight; }

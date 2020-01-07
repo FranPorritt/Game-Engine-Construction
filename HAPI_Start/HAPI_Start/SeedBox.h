@@ -6,7 +6,7 @@ class SeedBox :	public Interactables
 private:
 	int respawnRate = 500;
 	int timer = 0;
-	float timerPercentage = 0;
+	float timerPercentage = 1.0f;
 
 	bool hasSeeds = true;
 
@@ -15,8 +15,6 @@ public:
 	~SeedBox();
 
 	void Update() override final;
-
-	const bool InteractButtonPressed() override final { return isPlayerColliding; };
 
 	const float GetTimerPercent() { return timerPercentage; };
 	const bool GetSeed() { return hasSeeds; };

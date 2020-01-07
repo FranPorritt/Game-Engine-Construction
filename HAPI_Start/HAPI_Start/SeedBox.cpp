@@ -24,7 +24,7 @@ void SeedBox::Update()
 		else
 		{
 			timer++;
-			timerPercentage = (timer / respawnRate);
+			timerPercentage = ((float)timer / (float)respawnRate);
 		}
 	}
 }

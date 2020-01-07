@@ -20,9 +20,10 @@ private:
 	bool isChickenEating = false;
 
 public:
-	// Passed into FSM -- Could make private and make getters/setters?
+	// Passed into FSM -- Public because state machine has to change them
 	bool isHungry = true;
 	bool isFeederFull = false;
+	bool laidEgg = false;
 	bool lastFeederState = isFeederFull;
 
 	Chicken(const std::string& graphicIDArg, vector2<int> positionArg);
@@ -32,8 +33,10 @@ public:
 	void Direction();
 	void Eat();
 
+	void SetEating() { isChickenEating = false; };
+	void SetSpeed(int Speed) { speed = Speed; };
+
 	const vector2<int> GetPos() { return position; };
 	const int GetRate() { return chickenRate; };
 	const bool GetEating() { return isChickenEating; };
-	void SetEating() { isChickenEating = false; };
 };

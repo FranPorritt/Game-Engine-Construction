@@ -5,12 +5,16 @@
 
 ChickenState* TransitionState::Handle(Chicken& chicken)
 {
+	chicken.SetSpeed(1);
+
 	if ((!chicken.isHungry) && (isDoneTransitioning))
 	{
+		chicken.SetSpeed(2);
 		return new EggState();
 	}
 	else if (isDoneTransitioning)
 	{
+		chicken.SetSpeed(1);
 		return new WanderingState();
 	}
 
@@ -47,6 +51,7 @@ void TransitionState::Direction(Chicken& chicken)
 	{
 		isDoneTransitioning = true;
 		chicken.direction = EDirection::eStop;
+		chicken.Handle();
 	}
 	else
 	{

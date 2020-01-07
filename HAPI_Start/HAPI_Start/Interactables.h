@@ -13,7 +13,7 @@ public:
 	~Interactables();
 
 	void Direction() override final;	
-	virtual const bool InteractButtonPressed() = 0; // Only called when player has pressed interaction button
+	const bool InteractButtonPressed() { return isPlayerColliding; }; // Only called when player has pressed interaction button
 	bool Collision(Entity& entity1, Entity& entity2) override final;
 };
 

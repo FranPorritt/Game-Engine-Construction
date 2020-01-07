@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Chicken.cpp" />
     <ClCompile Include="ChickenState.cpp" />
+    <ClCompile Include="Coop.cpp" />
     <ClCompile Include="EggState.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Environment.cpp" />
@@ -36,10 +37,12 @@
     </ClCompile>
     <ClCompile Include="NOTES.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="SeedBox.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TransitionState.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Visualisation.cpp" />
     <ClCompile Include="WanderingState.cpp" />
     <ClCompile Include="World.cpp" />
@@ -47,6 +50,7 @@
   <ItemGroup>
     <ClInclude Include="Chicken.h" />
     <ClInclude Include="ChickenState.h" />
+    <ClInclude Include="Coop.h" />
     <ClInclude Include="EggState.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Environment.h" />
@@ -55,10 +59,12 @@
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="Interactables.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="SeedBox.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TransitionState.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="Visualisation.h" />
     <ClInclude Include="WanderingState.h" />

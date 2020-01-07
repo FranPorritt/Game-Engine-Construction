@@ -9,7 +9,10 @@
 #include "Environment.h"
 #include "SeedBox.h"
 #include "Feeder.h"
+#include "Coop.h"
 #include "Interactables.h"
+#include "Projectile.h"
+#include "UI.h"
 
 using namespace HAPISPACE;
 
@@ -19,10 +22,10 @@ World::World()
 
 World::~World()
 {
-	delete& m_vis;
 	delete& player;
 	delete& feeder;
 	delete& seedBox;
+	delete& rock;
 
 	for (auto& entity : m_entities)
 	{
@@ -60,79 +63,87 @@ void World::Update()
 
 bool World::Initialise()
 {
-	m_vis = std::make_shared<Visualisation>();
 	if (!LoadLevel())
 		return false;
 
+	m_ui = std::make_shared<UI>();
+	m_ui->Initialise();
+
 	HAPI.SetShowFPS(true);
 
+	// Gets clock value for x seconds
 	gameTimer = CLOCKS_PER_SEC * levelTime;
+	rockClockLife = CLOCKS_PER_SEC * rockSecondsLife;
 
 	return true;
 }
 
 bool World::LoadLevel()
 {
-	if (!m_vis->CreateSprite("Data\\menu.png", "menuPage", 1, 1))
+	if (!VIS.CreateSprite("Data\\menu.png", "menuPage", 1, 1))
 		return false;
 
 	// Background Sprite
-	if (!m_vis->CreateSprite("Data\\environment.png", "background", 1, 1)) // BACKGROUND MAKE ENTITY
+	if (!VIS.CreateSprite("Data\\environment.png", "background", 1, 1)) // BACKGROUND MAKE ENTITY
 		return false;
 	// Timer Sprite
-	if (!m_vis->CreateSprite("Data\\timer.png", "timer", 1, 1))
+	if (!VIS.CreateSprite("Data\\timer.png", "timer", 1, 1))
 		return false;
 
 	// Player Sprite
-	if (!m_vis->CreateSprite("Data\\player.png", "player", 1, 1)) // Last 2 ints for sprite sheets
+	if (!VIS.CreateSprite("Data\\player.png", "player", 1, 1)) // Last 2 ints for sprite sheets
 		return false;
-	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken", 1, 1))
-		return false;
-	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken1", 1, 1))
-		return false;
-	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken2", 1, 1))
-		return false;
-	if (!m_vis->CreateSprite("Data\\White Chicken.png", "chicken3", 1, 1))
-		return false;
+
+	// Chickens
+	for (int chickenIndex = 0; chickenIndex < NUM_OF_CHICKENS; chickenIndex++)
+	{
+		if (!VIS.CreateSprite("Data\\White Chicken.png", "chicken" + std::to_string(chickenIndex), 1, 1))
+			return false;
+	}
 
 	// Fences Play Area
-	if (!m_vis->CreateSprite("Data\\fenceFront.png", "fenceFront", 1, 1))
+	if (!VIS.CreateSprite("Data\\fenceFront.png", "fenceFront", 1, 1))
 		return false;
-	if (!m_vis->CreateSprite("Data\\fenceFront.png", "fenceBack", 1, 1))
+	if (!VIS.CreateSprite("Data\\fenceFront.png", "fenceBack", 1, 1))
 		return false;
-	if (!m_vis->CreateSprite("Data\\fenceSide.png", "fenceLeft", 1, 1))
+	if (!VIS.CreateSprite("Data\\fenceSide.png", "fenceLeft", 1, 1))
 		return false;
-	if (!m_vis->CreateSprite("Data\\fenceSide.png", "fenceRight", 1, 1))
-		return false;
-	if (!m_vis->CreateSprite("Data\\seedEmpty.png", "seedBox", 1, 1))
-		return false;
-	if (!m_vis->CreateSprite("Data\\feederFull.png", "feeder", 1, 1))
+	if (!VIS.CreateSprite("Data\\fenceSide.png", "fenceRight", 1, 1))
 		return false;
 
-	// UI
-	if (!m_vis->CreateSprite("Data\\Text\\timesup.png", "timesUpText", 1, 1))
+	// Interactables
+	if (!VIS.CreateSprite("Data\\seedEmpty.png", "seedBox", 1, 1))
+		return false;
+	if (!VIS.CreateSprite("Data\\feederEmpty.png", "feeder", 1, 1))
+		return false;
+	if (!VIS.CreateSprite("Data\\coop.png", "coop", 1, 1))
 		return false;
 
-	//ui.push_back("timesUpText");
+	// Rock
+	if (!VIS.CreateSprite("Data\\rock.png", "rock", 1, 1))
+		return false;
 
 	// Draw order
 	m_entities.push_back(new Environment("fenceBack", { 180, 176 }));
 	m_entities.push_back(new Environment("fenceLeft", { 191, 205 }));
 	m_entities.push_back(new Environment("fenceRight", { 788, 205 }));
 	m_entities.push_back(new SeedBox("seedBox", { 220, 190 }));
+	m_entities.push_back(new Coop("coop", { 650, 200 }));
 	m_entities.push_back(new Player("player", { 512, 384 }));
 	m_entities.push_back(new Feeder("feeder", { 220, 570 }));
 	m_entities.push_back(new Environment("fenceFront", { 180, 576 })); // Must be drawn after Player
 
-	m_chickenEntities.push_back(new Chicken("chicken", { 560, 384 }));
-	m_chickenEntities.push_back(new Chicken("chicken1", { 430, 480 }));
-	m_chickenEntities.push_back(new Chicken("chicken2", { 650, 290 }));
-	m_chickenEntities.push_back(new Chicken("chicken3", { 390, 384 }));
+	for (int chickenIndex = 0; chickenIndex < NUM_OF_CHICKENS; chickenIndex++)
+	{
+		m_chickenEntities.push_back(new Chicken("chicken" + std::to_string(chickenIndex), { rand() % 550 + 200, rand() % 350 + 200 }));
+	}
+
+	rock = new Projectile("rock", { 0,0 }); // Only one, player can only thrown one at a time
 
 	for (auto& entity : m_entities)
 	{
-		m_vis->CreateSourceRect(entity->GetID());
-		entity->CreateRect(m_vis->GetSpriteHeight(entity->GetID()), m_vis->GetSpriteWidth(entity->GetID()));
+		VIS.CreateSourceRect(entity->GetID());
+		entity->CreateRect(VIS.GetSpriteHeight(entity->GetID()), VIS.GetSpriteWidth(entity->GetID()));
 
 		if (entity->GetSide() == ESide::eSidePlayer)
 		{
@@ -146,13 +157,20 @@ bool World::LoadLevel()
 		{
 			feeder = entity;
 		}
+		else if (entity->GetSide() == ESide::eSideCoop)
+		{
+			coop = entity;
+		}
 	}
 
 	for (auto& chicken : m_chickenEntities)
 	{
-		m_vis->CreateSourceRect(chicken->GetID());
-		chicken->CreateRect(m_vis->GetSpriteHeight(chicken->GetID()), m_vis->GetSpriteWidth(chicken->GetID()));
+		VIS.CreateSourceRect(chicken->GetID());
+		chicken->CreateRect(VIS.GetSpriteHeight(chicken->GetID()), VIS.GetSpriteWidth(chicken->GetID()));
 	}
+
+	VIS.CreateSourceRect(rock->GetID());
+	rock->CreateRect(VIS.GetSpriteHeight(rock->GetID()), VIS.GetSpriteWidth(rock->GetID()));
 
 	return true;
 }
@@ -168,13 +186,13 @@ void World::Run()
 void World::MainMenu()
 {
 	HAPI_TColour clearScreenCol = HAPI_TColour::BLACK;
-	m_vis->ClearToColour(clearScreenCol);
+	VIS.ClearToColour(clearScreenCol);
 
 	while ((HAPI.Update()) && (currentState == GameState::eMenu))
 	{
 		const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 
-		m_vis->DrawBackgroundSprite("menuPage", 0, 0);
+		VIS.DrawBackgroundSprite("menuPage", 0, 0);
 
 		if (keyData.scanCode['1'])
 		{
@@ -193,7 +211,7 @@ void World::Play()
 	gameStartTime = clock(); // Gets clock value when game starts, minus from currentTime for game timer
 
 	HAPI_TColour clearScreenCol = HAPI_TColour::BLACK;
-	m_vis->ClearToColour(clearScreenCol);
+	VIS.ClearToColour(clearScreenCol);
 
 	while ((HAPI.Update()) && (currentState == GameState::ePlay))
 	{
@@ -207,13 +225,42 @@ void World::Play()
 				Interaction();
 			}
 
+			if ((keyData.scanCode['F']) && (numOfRocks > 0))
+			{
+				Throw();
+			}
+
 			if (currentTime >= callTime + tickRate)
 			{
-				m_vis->ClearToColour(clearScreenCol);
-				m_vis->DrawBackgroundSprite("background", 0, 0);
-				//m_vis->DrawTimerSprite("timer", 220, 175, static_cast<SeedBox*>(seedBox)->GetTimerPercent());
+				VIS.ClearToColour(clearScreenCol);
+				VIS.DrawBackgroundSprite("background", 0, 0);
 
-				// Draws entities every frame
+				// Game Timer + UI
+				int timerValue = levelTime - ((currentTime - gameStartTime) / CLOCKS_PER_SEC);
+				m_ui->GameTimer(timerValue);
+				m_ui->Controls();
+				m_ui->EggScore(eggsCollected);
+				m_ui->RockCounter(numOfRocks);
+
+				if (eggsInCoop > 0)
+				{
+					m_ui->EggCoop();
+				}
+
+				if (static_cast<SeedBox*>(seedBox)->GetSeed())
+				{
+					// Draws empty sprite with full sprite on top -- has to be drawn above player
+					VIS.DrawSprite(seedBox->GetID(), seedBox->GetPos().xPos, seedBox->GetPos().yPos);
+					m_ui->SeedFull();
+				}
+				else
+				{
+					// Seed box timer -- can this be moved to UI? (wouldn't be able to use sprite code???)
+					VIS.DrawTimerSprite("timer", 220, 165, static_cast<SeedBox*>(seedBox)->GetTimerPercent());
+					VIS.DrawSprite(seedBox->GetID(), seedBox->GetPos().xPos, seedBox->GetPos().yPos);
+				}
+
+				// Draws entities every frame + collisions
 				for (auto& entity : m_entities)
 				{
 					vector2<int> currentPos = entity->GetPos();
@@ -226,27 +273,62 @@ void World::Play()
 						{
 							if (entity->Collision(*entity, *entity2))
 							{
+								// Environament types made a weird invisible wall halfway through play area??? Need to fix properly :(
 								if ((entity->GetType() != EType::eTypeEnvironment) && (entity2->GetType() != EType::eTypeEnvironment))
 								{
 									entity->SetPos(currentPos);
 								}
 							}
 						}
+					}					
+
+					VIS.DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
+
+					// Draws interactables with different states seperately for each state
+					if (entity->GetSide() == ESide::eSideSeed)
+					{
+						if (static_cast<SeedBox*>(seedBox)->GetSeed())
+						{
+							// Draws empty sprite with full sprite on top -- has to be drawn above player
+							VIS.DrawSprite(seedBox->GetID(), seedBox->GetPos().xPos, seedBox->GetPos().yPos);
+							m_ui->SeedFull();
+						}
+						else
+						{
+							// Seed box timer -- can this be moved to UI? (wouldn't be able to use sprite code???)
+							VIS.DrawTimerSprite("timer", 220, 165, static_cast<SeedBox*>(seedBox)->GetTimerPercent());
+							VIS.DrawSprite(seedBox->GetID(), seedBox->GetPos().xPos, seedBox->GetPos().yPos);
+						}
 					}
-
-					m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
-
+					else if (entity->GetSide() == ESide::eSideFeeder)
+					{
+						if (static_cast<Feeder*>(feeder)->GetSeed())
+						{
+							m_ui->FeederFull();
+						}
+						else
+						{
+							VIS.DrawSprite(feeder->GetID(), feeder->GetPos().xPos, feeder->GetPos().yPos);
+						}
+					}
 				}
 
+				// CHICKEN AI
 				for (auto& chicken : m_chickenEntities)
 				{
-					m_vis->DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
+					VIS.DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
 					chicken->Movement();
 
 					if (chicken->GetEating())
 					{
 						static_cast<Feeder*>(feeder)->Eat();
 						chicken->SetEating();
+					}
+
+					if (chicken->laidEgg)
+					{
+						eggsInCoop++;
+						chicken->laidEgg = false;
 					}
 
 					// Immediately calls new state when circumstances change - ie. food all gone, chickens stopping heading for it
@@ -258,10 +340,26 @@ void World::Play()
 					}
 				}
 
+				// PROJECTILE
+				if (rock->GetFlag())
+				{
+					VIS.DrawSprite(rock->GetID(), rock->GetPos().xPos, rock->GetPos().yPos);
+					rock->Movement();
+
+					if (currentTime >= rockCallTime + rockClockLife)
+					{
+						rock->SetFlag(0);
+					}
+				}
+				else // rock changes direction mid throw otherwise
+				{
+					rock->SetDir(static_cast<Player*>(player)->GetLastDir()); // Gets players last direction, ignores stop -- throws in last direction player was heading
+				}
+
 				callTime = clock();
 			}
 
-			// Controls switch between wandering and idle chicken states		
+			// CHICKEN STATES	
 			if (currentTime >= chickenCallTime + chickenRate)
 			{
 				for (auto& chicken : m_chickenEntities)
@@ -281,27 +379,27 @@ void World::Play()
 		{
 			for (auto& entity : m_entities)
 			{
-				m_vis->DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
+				VIS.DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
 			}
 
 			for (auto& chicken : m_chickenEntities)
 			{
-				m_vis->DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
+				VIS.DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
 			}
 		}
 
+		// GAME TIMER -- could be moved to UI
 		if ((currentTime - gameStartTime) >= gameTimer)
 		{
-			m_vis->DrawSprite("timesUpText", 312, 309);
 			timesUp = true;
-			std::cout << "TIME'S UP" << std::endl;
+			m_ui->TimesUp();
 		}
 	}
 }
 
 void World::Exit()
 {
-
+	// Pause menu needs implementing
 }
 
 void World::Interaction()
@@ -310,7 +408,7 @@ void World::Interaction()
 	{
 		if (interactable->GetType() == EType::eTypeInteractable)
 		{
-			if (static_cast<Interactables*>(interactable)->InteractButtonPressed()) // Checks if player is trying to interact with this object
+			if (static_cast<Interactables*>(interactable)->InteractButtonPressed()) // Checks if player is trying to interact with this object (collision function)
 			{
 				// Which object determines response.
 				switch (interactable->GetSide())
@@ -337,6 +435,10 @@ void World::Interaction()
 					}
 					break;
 
+				case ESide::eSideCoop:
+					CollectEgg();
+					break;
+
 				default:
 					break;
 				}
@@ -348,4 +450,21 @@ void World::Interaction()
 void World::SeedInteract(const int& value)
 {
 	static_cast<Player*>(player)->SetSeeds(value);
+}
+
+void World::CollectEgg()
+{
+	eggsCollected += eggsInCoop;
+	eggsInCoop = 0;
+}
+
+void World::Throw()
+{
+	if (!rock->GetFlag()) // Rock isn't active
+	{
+		rock->SetFlag(1); // Sets flag to true
+		rock->SetPos(player->GetPos());
+		numOfRocks--;
+		rockCallTime = clock();
+	}
 }

@@ -4,8 +4,12 @@
 
 ChickenState* EggState::Handle(Chicken& chicken)
 {
+	coopPos.xPos = (rand() % 114 + 650); // Width of sprite
+	chicken.SetSpeed(2);
+
 	if (!chicken.isHungry)
 	{
+		chicken.SetSpeed(2);
 		return new EggState();
 	}
 
@@ -38,8 +42,8 @@ void EggState::Direction(Chicken& chicken)
 	if ((xCoopDistance <= 3) && (yCoopDistance <= 3))
 	{
 		chicken.isHungry = true; // CHANGE TO EATSTATE ONCE IMPLEMENTED
-		chicken.isFeederFull = false; // TEST - REMOVE
-		chicken.direction = EDirection::eStop;
+		chicken.laidEgg = true;
+		chicken.Handle();
 	}
 	else
 	{

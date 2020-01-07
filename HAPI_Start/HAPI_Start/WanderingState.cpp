@@ -5,12 +5,16 @@
 
 ChickenState* WanderingState::Handle(Chicken& chicken)
 {
+	chicken.SetSpeed(1);
+
 	if ((chicken.isHungry) && (!chicken.isFeederFull))
 	{
+		chicken.SetSpeed(1);
 		return new IdleState();
 	}
 	else if ((chicken.isHungry) && (chicken.isFeederFull))
 	{
+		chicken.SetSpeed(3);
 		return new HungryState();
 	}
 }

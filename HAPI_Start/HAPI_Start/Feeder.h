@@ -12,10 +12,8 @@ public:
 	Feeder(const std::string& graphicIDArg, vector2<int> positionArg);
 	~Feeder();
 
-	void Update() override final;
 	void Eat();
 
-	const bool InteractButtonPressed() override final { return isPlayerColliding; };
 	void SetSeedTrue();
 
 	const bool GetSeed() { return hasSeeds; };

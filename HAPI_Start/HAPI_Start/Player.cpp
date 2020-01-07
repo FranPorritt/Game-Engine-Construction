@@ -17,6 +17,7 @@ Player::~Player()
 void Player::Direction()
 {
 	const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+	lastDirection = direction;
 
 	//  Set enum
 	if ((keyData.scanCode['W']) && (position.yPos > 180)) // MAGIC NUMBERS

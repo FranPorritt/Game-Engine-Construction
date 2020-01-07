@@ -5,19 +5,23 @@
 
 ChickenState* IdleState::Handle(Chicken& chicken)
 {
+	chicken.SetSpeed(1);
+
 	if ((!chicken.isHungry) || (!chicken.isFeederFull))
 	{
+		chicken.SetSpeed(1);
 		return new WanderingState();
 	}
 	else if ((chicken.isHungry) && (chicken.isFeederFull))
 	{
+		chicken.SetSpeed(3);
 		return new HungryState();
 	}
 }
 
 void IdleState::Enter(Chicken& chicken)
 {
-	// WILL CONTROL GRAPHICS AT SOME POINT, ECT.
+	// WILL CONTROL GRAPHICS & SOUND AT SOME POINT
 }
 
 void IdleState::Update(Chicken& chicken)

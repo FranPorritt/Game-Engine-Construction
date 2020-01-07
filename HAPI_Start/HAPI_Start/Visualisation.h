@@ -10,6 +10,9 @@ class Sprite;
 
 class Visualisation
 {	
+private:
+	static Visualisation* _instance;
+	Visualisation();
 protected:
 	Rectangle destRect;
 
@@ -20,7 +23,7 @@ protected:
 	unordered_map<string, Sprite*> spriteMap;
 	   
 public:
-	Visualisation();
+	static Visualisation& GetInstance();
 	~Visualisation();
 
 	void ClearToColour(HAPI_TColour colour);
@@ -29,7 +32,7 @@ public:
 	void CreateSourceRect(const string& filename);
 	void DrawBackgroundSprite(const string& name, int spriteX, int spriteY); // Doesn't check for clipping, improves framerate
 	void DrawSprite(const string& name, int spriteX, int spriteY);
-	void DrawTimerSprite(const string& name, int spriteX, int spriteY, int timerPercent);
+	void DrawTimerSprite(const string& name, int spriteX, int spriteY, float timerPercent);
 
 	int GetScreenWidth() const { return screenWidth; }
 	int GetScreenHeight() const { return screenHeight; }
@@ -38,3 +41,4 @@ public:
 	int GetSpriteHeight(const string& name) const;
 };
 
+#define VIS Visualisation::GetInstance()

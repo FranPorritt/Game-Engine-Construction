@@ -132,14 +132,14 @@ void Sprite::ClipBlit(int& spriteX, int& spriteY, BYTE* screen, Rectangle& destR
 	}
 }
 
-void Sprite::TimerClipBlit(int spriteX, int spriteY, BYTE* screen, int screenWidth, int screenHeight, int timerPercent)
+void Sprite::TimerClipBlit(int spriteX, int spriteY, BYTE* screen, int screenWidth, int screenHeight, float& timerPercent)
 {
 	int offset = (spriteY * screenWidth + spriteX) * 4;
 
 	BYTE* screenPntr = screen + offset;
 	BYTE* texturePntr = data;
 
-	int endOfLineScreenIncrement = (screenWidth - (spriteWidth * timerPercent)) * 4;
+	int endOfLineScreenIncrement = (screenWidth - (spriteWidth * timerPercent)) * 4; 
 
 	for (int y = 0; y < spriteHeight; y++)
 	{

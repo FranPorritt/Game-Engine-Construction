@@ -20,6 +20,7 @@ enum class ESide
 	eSideChicken,
 	eSideNeutral,
 	eSideFeeder,
+	eSideCoop,
 };
 
 enum class EType
@@ -28,6 +29,7 @@ enum class EType
 	eTypeAI,
 	eTypeNeutral,
 	eTypeEnvironment,
+	eTypeProjectile
 };
 
 class Entity
@@ -39,7 +41,7 @@ protected:
 	int speed = 0;
 	int health = 0;
 	int viewOffset = 0;
-	bool activeFlag = false;
+	bool activeFlag = true;
 	ESide side = ESide::eSideNeutral;
 	EType type = EType::eTypeNeutral;
 

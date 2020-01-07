@@ -11,12 +11,6 @@ Feeder::~Feeder()
 	delete this;
 }
 
-void Feeder::Update()
-{
-	// once 2 chickens have interacted -- not full
-	// ie. health = 2, chicken eat - 1 health, if health = 0, not full
-}
-
 void Feeder::Eat()
 {
 	if (seedHealth == 0)

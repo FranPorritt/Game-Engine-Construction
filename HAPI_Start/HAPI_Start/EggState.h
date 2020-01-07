@@ -6,7 +6,7 @@
 class EggState : public ChickenState
 {
 protected:
-	vector2<int> coopPos = { 740 , 200 }; // MAKE RANGE OF COOP LENGTH WHEN IN
+	vector2<int> coopPos = { (rand() % 114 + 650) , 250 };
 
 	int xCoopDistance = 0;
 	int yCoopDistance = 0;
