@@ -1,6 +1,7 @@
 #include "IdleState.h"
 #include "WanderingState.h"
 #include "HungryState.h"
+#include "FleeingState.h"
 #include "Chicken.h"
 
 ChickenState* IdleState::Handle(Chicken& chicken)
@@ -11,6 +12,10 @@ ChickenState* IdleState::Handle(Chicken& chicken)
 	{
 		chicken.SetSpeed(1);
 		return new WanderingState();
+	}
+	else if (chicken.isFleeing)
+	{
+		return new FleeingState();
 	}
 	else if ((chicken.isHungry) && (chicken.isFeederFull))
 	{

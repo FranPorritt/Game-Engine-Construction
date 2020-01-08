@@ -25,6 +25,12 @@
     <Filter Include="Header Files\Interactables">
       <UniqueIdentifier>{1bfcd0c4-49cb-41eb-87b0-0ddce2d10846}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Cat FSM">
+      <UniqueIdentifier>{15c99753-611a-4215-91a6-4a3ecd6b5b9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Cat FSM">
+      <UniqueIdentifier>{5e674281-70b4-474f-b8ea-63b840e20f12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -93,6 +99,24 @@
     <ClCompile Include="SeedBox.cpp">
       <Filter>Source Files\Interactables</Filter>
     </ClCompile>
+    <ClCompile Include="Cat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CatState.cpp">
+      <Filter>Source Files\Cat FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HuntingState.cpp">
+      <Filter>Source Files\Cat FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="InactiveState.cpp">
+      <Filter>Source Files\Cat FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="FleeingState.cpp">
+      <Filter>Source Files\Chicken FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="LeavingState.cpp">
+      <Filter>Source Files\Cat FSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visualisation.h">
@@ -157,6 +181,24 @@
     </ClInclude>
     <ClInclude Include="SeedBox.h">
       <Filter>Header Files\Interactables</Filter>
+    </ClInclude>
+    <ClInclude Include="Cat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CatState.h">
+      <Filter>Header Files\Cat FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="HuntingState.h">
+      <Filter>Header Files\Cat FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="InactiveState.h">
+      <Filter>Header Files\Cat FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="FleeingState.h">
+      <Filter>Header Files\Chicken FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="LeavingState.h">
+      <Filter>Header Files\Cat FSM</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

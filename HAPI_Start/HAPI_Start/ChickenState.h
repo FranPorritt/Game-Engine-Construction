@@ -1,8 +1,6 @@
 #pragma once
 
 class Chicken;
-class IdleState;
-class WanderingState;
 
 class ChickenState
 {

@@ -11,9 +11,6 @@ protected:
 	int xFeederDistance = 0;
 	int yFeederDistance = 0;
 
-	bool isHeadingX = false;
-	bool isHeadingY = false;
-
 public:
 	ChickenState* Handle(Chicken& chicken);
 	void Enter(Chicken& chicken);

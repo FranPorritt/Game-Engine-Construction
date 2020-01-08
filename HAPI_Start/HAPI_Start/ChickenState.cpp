@@ -1,7 +1,5 @@
 #include "ChickenState.h"
 #include "Chicken.h"
-#include "IdleState.h"
-#include "WanderingState.h"
 #include "HAPI_lib.h"
 
 using namespace HAPISPACE;

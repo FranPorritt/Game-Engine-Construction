@@ -6,6 +6,7 @@
 #include "Visualisation.h"
 #include "Player.h"
 #include "Chicken.h"
+#include "Cat.h"
 #include "Environment.h"
 #include "SeedBox.h"
 #include "Feeder.h"
@@ -101,6 +102,13 @@ bool World::LoadLevel()
 			return false;
 	}
 
+	// Cats
+	for (int catIndex = 0; catIndex < NUM_OF_CATS; catIndex++)
+	{
+		if (!VIS.CreateSprite("Data\\cat.png", "cat" + std::to_string(catIndex), 1, 1))
+			return false;
+	}
+
 	// Fences Play Area
 	if (!VIS.CreateSprite("Data\\fenceFront.png", "fenceFront", 1, 1))
 		return false;
@@ -138,6 +146,11 @@ bool World::LoadLevel()
 		m_chickenEntities.push_back(new Chicken("chicken" + std::to_string(chickenIndex), { rand() % 550 + 200, rand() % 350 + 200 }));
 	}
 
+	for (int catIndex = 0; catIndex < NUM_OF_CATS; catIndex++)
+	{
+		m_catEntities.push_back(new Cat("cat" + std::to_string(catIndex), { -50, rand() % 350 + 200 }));
+	}
+
 	rock = new Projectile("rock", { 0,0 }); // Only one, player can only thrown one at a time
 
 	for (auto& entity : m_entities)
@@ -167,6 +180,12 @@ bool World::LoadLevel()
 	{
 		VIS.CreateSourceRect(chicken->GetID());
 		chicken->CreateRect(VIS.GetSpriteHeight(chicken->GetID()), VIS.GetSpriteWidth(chicken->GetID()));
+	}
+
+	for (auto& cat : m_catEntities)
+	{
+		VIS.CreateSourceRect(cat->GetID());
+		cat->CreateRect(VIS.GetSpriteHeight(cat->GetID()), VIS.GetSpriteWidth(cat->GetID()));
 	}
 
 	VIS.CreateSourceRect(rock->GetID());
@@ -216,6 +235,8 @@ void World::Play()
 	while ((HAPI.Update()) && (currentState == GameState::ePlay))
 	{
 		const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+		const HAPI_TControllerData& controllerData = HAPI.GetControllerData(0);
+	
 		currentTime = clock();
 
 		if (!timesUp)
@@ -224,10 +245,24 @@ void World::Play()
 			{
 				Interaction();
 			}
+			if (controllerData.isAttached)
+			{
+				if (controllerData.digitalButtons[HK_DIGITAL_A])
+				{
+					Interaction();
+				}
+			}
 
 			if ((keyData.scanCode['F']) && (numOfRocks > 0))
 			{
 				Throw();
+			}
+			if (controllerData.isAttached)
+			{
+				if (controllerData.digitalButtons[HK_DIGITAL_B])
+				{
+					Throw();
+				}
 			}
 
 			if (currentTime >= callTime + tickRate)
@@ -273,7 +308,7 @@ void World::Play()
 						{
 							if (entity->Collision(*entity, *entity2))
 							{
-								// Environament types made a weird invisible wall halfway through play area??? Need to fix properly :(
+								// Environment types made a weird invisible wall halfway through play area??? Need to fix properly :(
 								if ((entity->GetType() != EType::eTypeEnvironment) && (entity2->GetType() != EType::eTypeEnvironment))
 								{
 									entity->SetPos(currentPos);
@@ -313,11 +348,14 @@ void World::Play()
 					}
 				}
 
-				// CHICKEN AI
+				// CHICKEN AI - Draw/State Checks
 				for (auto& chicken : m_chickenEntities)
 				{
-					VIS.DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
-					chicken->Movement();
+					if (chicken->GetFlag())
+					{
+						VIS.DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
+						chicken->Movement();
+					}
 
 					if (chicken->GetEating())
 					{
@@ -331,6 +369,11 @@ void World::Play()
 						chicken->laidEgg = false;
 					}
 
+					if (chicken->isFleeing)
+					{
+						chicken->Handle();
+					}
+
 					// Immediately calls new state when circumstances change - ie. food all gone, chickens stopping heading for it
 					chicken->isFeederFull = static_cast<Feeder*>(feeder)->GetSeed();
 					if (chicken->isFeederFull != chicken->lastFeederState)
@@ -338,6 +381,13 @@ void World::Play()
 						chicken->Handle();
 						chicken->lastFeederState = chicken->isFeederFull;
 					}
+				}
+
+				// Cat Draw
+				for (auto& cat : m_catEntities)
+				{
+					VIS.DrawSprite(cat->GetID(), cat->GetPos().xPos, cat->GetPos().yPos);
+					cat->Movement();
 				}
 
 				// PROJECTILE
@@ -374,21 +424,32 @@ void World::Play()
 					}
 				}
 			}
-		}
-		else
-		{
-			for (auto& entity : m_entities)
+
+			// CAT STATES
+			if (currentTime >= catCallTime + catRate)
 			{
-				VIS.DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
+				for (auto& cat : m_catEntities)
+				{
+					int uniqueCatRate = rand() % 100;
+
+					if (currentTime >= catCallTime + uniqueCatRate)
+					{
+						cat->SetFlag(1);
+
+						if (!cat->CheckTarget()) // Checks cat doesn't already have target
+						{
+							cat->FindChicken(m_chickenEntities[rand() % NUM_OF_CHICKENS]);
+						}
+
+						cat->Handle();
+						catCallTime = clock();
+					}
+				}
 			}
 
-			for (auto& chicken : m_chickenEntities)
-			{
-				VIS.DrawSprite(chicken->GetID(), chicken->GetPos().xPos, chicken->GetPos().yPos);
-			}
 		}
 
-		// GAME TIMER -- could be moved to UI
+		// Game over / Times up
 		if ((currentTime - gameStartTime) >= gameTimer)
 		{
 			timesUp = true;

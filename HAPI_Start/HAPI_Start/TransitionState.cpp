@@ -1,6 +1,7 @@
 #include "TransitionState.h"
 #include "WanderingState.h"
 #include "EggState.h"
+#include "FleeingState.h"
 #include "Chicken.h"
 
 ChickenState* TransitionState::Handle(Chicken& chicken)
@@ -11,6 +12,10 @@ ChickenState* TransitionState::Handle(Chicken& chicken)
 	{
 		chicken.SetSpeed(2);
 		return new EggState();
+	}
+	else if (chicken.isFleeing)
+	{
+		return new FleeingState();
 	}
 	else if (isDoneTransitioning)
 	{

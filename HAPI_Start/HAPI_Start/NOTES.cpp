@@ -90,14 +90,15 @@
 //
 //
 // TO DO:
-// * Fix timer - Only works under 60 seconds :(
-// Controls
-// *** Enemy AI -> Doubt I can do a FSM in time left (may be able to re-use chicken a bit), get basic moving to chicken work first so we can do collisions for rocks
+// Fix timer - Only works under 60 seconds :(
+// * Controls (controller -- only works for movement)
+// *** Enemy AI  ---  Also second AI (bear) if time
 // * Pause
 // ** End Game - Restart
 // Better menu -- do similar to snake (if time)
 // ** Fix quit memory leaks
 // * Animation
+// ** Interpolation (B to A mark)
 //
 //
 // Difficulty features:
@@ -107,3 +108,27 @@
 // - Faster refill time on seeds
 // - More eats per seed
 // - Slower enemy spawns
+
+// 07-01-2020
+//
+// Future additions - report:
+// - Set speed in entity not just chick -- pick ups for player?
+//
+// Hindsight - should have made cat and chicken children of an ai class
+//			 - should have done chicken entity vector as list so i could remove them when dead
+//
+// Implemented cat ai and fsm
+// cat catches chicken and kills it - need to make chicken fleeState
+// FleeingState being set every loop meaning chicken is just running in tight circle
+// Need to figure out how to immediately call handle when chicken starts fleeing but then only call it once
+// every x seconds????
+//
+// LeavingState - if on right of screen dir = right until xPos > screenwidth
+//				- else dir = left until xPos < 0 - spriteWidth
+// Speed is meant to set to 3 when leaving, was working now that multiple cats work its broke
+// Set it with direction instead and works now
+//
+// Added controller handling for throw and use -- NEEDS TESTING DO IN MORNING
+//
+// ROCK COLLISIONS HAVE TO BE DONE TOMORROW!!!! Cats and rocks are seperate from entity vectors so should be simple
+// enough -- just same as entity collisions but pass in rock and cat?

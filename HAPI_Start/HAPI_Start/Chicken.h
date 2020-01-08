@@ -25,6 +25,7 @@ public:
 	bool isFeederFull = false;
 	bool laidEgg = false;
 	bool lastFeederState = isFeederFull;
+	bool isFleeing = false;
 
 	Chicken(const std::string& graphicIDArg, vector2<int> positionArg);
 	~Chicken();
@@ -34,7 +35,8 @@ public:
 	void Eat();
 
 	void SetEating() { isChickenEating = false; };
-	void SetSpeed(int Speed) { speed = Speed; };
+	void SetSpeed(const int& Speed) { speed = Speed; };
+	void SetFlag(const int& value) { activeFlag = value; };
 
 	const vector2<int> GetPos() { return position; };
 	const int GetRate() { return chickenRate; };

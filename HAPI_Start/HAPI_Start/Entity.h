@@ -21,6 +21,7 @@ enum class ESide
 	eSideNeutral,
 	eSideFeeder,
 	eSideCoop,
+	eSideCat,
 };
 
 enum class EType
@@ -29,7 +30,8 @@ enum class EType
 	eTypeAI,
 	eTypeNeutral,
 	eTypeEnvironment,
-	eTypeProjectile
+	eTypeProjectile,
+	eTypeEnemyAI,
 };
 
 class Entity
@@ -66,5 +68,6 @@ public:
 	std::string GetID() const { return graphicID; };
 	ESide GetSide() const { return side; };
 	EType GetType() const { return type; };
+	bool GetFlag() const { return activeFlag; };
 };
 
