@@ -61,6 +61,7 @@ public:
 	// Moves entity based on direction
 	void Movement();
 	virtual bool Collision(Entity& entity1, Entity& entity2);
+
 	void SetPos(vector2<int>& currentPos);
 
 	vector2<int> GetPos() const { return position; };

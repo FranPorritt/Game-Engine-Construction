@@ -11,13 +11,14 @@ class Chicken;
 class Cat;
 class Interactables;
 class Projectile;
-class UI;
+class UserInterface;
 
 enum class GameState
 {
 	eMenu,
 	ePlay,
 	eQuit,
+	eRestart,
 	// Pause, Restart, Win/Lose?
 };
 
@@ -25,9 +26,7 @@ class World
 {
 private:
 	GameState currentState = GameState::eMenu;
-
-	std::shared_ptr<UI> m_ui;
-
+	
 	std::vector <Entity*> m_entities;
 	std::vector <Chicken*> m_chickenEntities;
 	std::vector <Cat*> m_catEntities;
@@ -62,6 +61,8 @@ private:
 	int gameTimer = 0;  // Time in clock value
 	const int levelTime = 60; // Time in seconds
 	bool timesUp = false;
+
+	bool isPaused = false;
 public:
 	World();
 	~World();
@@ -74,6 +75,7 @@ public:
 	void MainMenu();
 	void Play();
 	void Exit();
+	void Restart();
 
 	void Interaction();
 	void SeedInteract(const int& value);

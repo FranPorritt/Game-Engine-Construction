@@ -8,9 +8,6 @@
 
 ChickenState* HungryState::Handle(Chicken& chicken)
 {
-	feederPos.xPos = (rand() % 96 + 220); // Width of sprite
-	chicken.SetSpeed(2);
-
 	if ((chicken.isHungry) && (!chicken.isFeederFull))
 	{
 		chicken.SetSpeed(1);
@@ -39,6 +36,32 @@ ChickenState* HungryState::Handle(Chicken& chicken)
 
 void HungryState::Enter(Chicken& chicken)
 {
+	feederPos.xPos = (rand() % 96 + 220); // Width of sprite
+	chicken.SetSpeed(2);
+
+	int sound = rand() % 4;
+
+	switch (sound)
+	{
+	case 0:
+		HAPI.PlaySound("Data\\Sound\\cluck.flac");
+		break;
+
+	case 1:
+		HAPI.PlaySound("Data\\Sound\\cluck2.flac");
+		break;
+
+	case 2:
+		HAPI.PlaySound("Data\\Sound\\cluck3.flac");
+		break;
+
+	case 3:
+		HAPI.PlaySound("Data\\Sound\\cluck4.flac");
+		break;
+
+	default:
+		break;
+	}
 }
 
 void HungryState::Update(Chicken& chicken)

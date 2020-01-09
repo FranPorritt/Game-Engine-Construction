@@ -22,6 +22,8 @@ ChickenState* IdleState::Handle(Chicken& chicken)
 		chicken.SetSpeed(3);
 		return new HungryState();
 	}
+
+	return new IdleState();
 }
 
 void IdleState::Enter(Chicken& chicken)

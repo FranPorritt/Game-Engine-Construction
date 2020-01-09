@@ -46,9 +46,10 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="SeedBox.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TransitionState.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="Visualisation.cpp" />
     <ClCompile Include="WanderingState.cpp" />
     <ClCompile Include="World.cpp" />
@@ -74,9 +75,10 @@
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="SeedBox.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TransitionState.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="UserInterface.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="Visualisation.h" />
     <ClInclude Include="WanderingState.h" />

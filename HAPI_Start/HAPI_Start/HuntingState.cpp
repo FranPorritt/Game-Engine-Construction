@@ -8,7 +8,7 @@ CatState* HuntingState::Handle(Cat& cat)
 {
 	cat.SetSpeed(1);
 
-	if (reachedTarget)
+	if ((reachedTarget) || (cat.GetHit()))
 	{
 		return new LeavingState();
 	}
@@ -18,6 +18,10 @@ CatState* HuntingState::Handle(Cat& cat)
 
 void HuntingState::Enter(Cat& cat)
 {
+	if (rand() % 20 == 0)
+	{
+		HAPI.PlaySound("Data\\Sound\\meow.wav");
+	}
 }
 
 void HuntingState::Update(Cat& cat)

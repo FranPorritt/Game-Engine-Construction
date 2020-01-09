@@ -13,6 +13,7 @@ class Visualisation
 private:
 	static Visualisation* _instance;
 	Visualisation();
+
 protected:
 	Rectangle destRect;
 

@@ -5,9 +5,6 @@
 
 ChickenState* EggState::Handle(Chicken& chicken)
 {
-	coopPos.xPos = (rand() % 114 + 650); // Width of sprite
-	chicken.SetSpeed(2);
-
 	if (!chicken.isHungry)
 	{
 		chicken.SetSpeed(2);
@@ -24,6 +21,8 @@ ChickenState* EggState::Handle(Chicken& chicken)
 void EggState::Enter(Chicken& chicken)
 {
 	// WILL CONTROL GRAPHICS AT SOME POINT, ECT.
+	coopPos.xPos = (rand() % 114 + 650); // Width of sprite
+	chicken.SetSpeed(2);
 }
 
 void EggState::Update(Chicken& chicken)
@@ -46,6 +45,7 @@ void EggState::Direction(Chicken& chicken)
 
 	if ((xCoopDistance <= 3) && (yCoopDistance <= 3))
 	{
+		HAPI.PlaySound("Data\\Sound\\coin.wav");
 		chicken.isHungry = true; // CHANGE TO EATSTATE ONCE IMPLEMENTED
 		chicken.laidEgg = true;
 		chicken.Handle();

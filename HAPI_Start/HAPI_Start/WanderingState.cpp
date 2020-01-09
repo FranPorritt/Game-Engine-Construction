@@ -22,10 +22,39 @@ ChickenState* WanderingState::Handle(Chicken& chicken)
 	{
 		return new FleeingState();
 	}
+
+	return new WanderingState();
 }
 
 void WanderingState::Enter(Chicken& chicken)
 {
+	const int sound = rand() % 4;
+
+	if (rand() % 4 == 0)
+	{
+		switch (sound)
+		{
+		case 0:
+			HAPI.PlaySound("Data\\Sound\\cluck.flac");
+			break;
+
+		case 1:
+			HAPI.PlaySound("Data\\Sound\\cluck2.flac");
+			break;
+
+		case 2:
+			HAPI.PlaySound("Data\\Sound\\cluck3.flac");
+			break;
+
+		case 3:
+			HAPI.PlaySound("Data\\Sound\\cluck4.flac");
+			break;
+
+		default:
+			break;
+		}
+	}
+
 	hasDirection = false;
 }
 

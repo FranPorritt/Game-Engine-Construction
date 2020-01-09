@@ -17,6 +17,12 @@ CatState* LeavingState::Handle(Cat& cat)
 void LeavingState::Enter(Cat& cat)
 {
 	// WILL CONTROL GRAPHICS & SOUND AT SOME POINT
+
+	if (cat.GetHit())
+	{
+		HAPI.PlaySound("Data\\Sound\\sadMeow.wav");
+		cat.SetHit(0);
+	}
 }
 
 void LeavingState::Update(Cat& cat)

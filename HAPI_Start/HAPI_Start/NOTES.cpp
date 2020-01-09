@@ -132,3 +132,24 @@
 //
 // ROCK COLLISIONS HAVE TO BE DONE TOMORROW!!!! Cats and rocks are seperate from entity vectors so should be simple
 // enough -- just same as entity collisions but pass in rock and cat?
+
+// 08-01-2020
+//
+// Rock collisions done! :D
+//
+// To Do List:
+// - Game cycling
+//		- Pause
+//		- Restart
+// - Difficulty level
+//		- Two options
+// - Sound/Animation
+// - Interpolation
+//
+//
+// Started making sound class but not sure I need it
+//
+// Started working on a restart/return to menu after times up but it's not working, no idea what's wrong :(
+//
+// Pause works but button press is sensitive
+// Doesn't stop timer - simple fix should just to be to track how much time passes during paused time and it to game timer?

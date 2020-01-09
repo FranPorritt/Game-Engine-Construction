@@ -13,7 +13,7 @@
 #include "Coop.h"
 #include "Interactables.h"
 #include "Projectile.h"
-#include "UI.h"
+#include "UserInterface.h"
 
 using namespace HAPISPACE;
 
@@ -38,6 +38,11 @@ World::~World()
 		delete chicken;
 	}
 
+	for (auto& cat : m_catEntities)
+	{
+		delete cat;
+	}
+
 	//delete this;
 }
 
@@ -57,6 +62,10 @@ void World::Update()
 		Exit();
 		break;
 
+	case GameState::eRestart:
+		Restart();
+		break;
+
 	default:
 		break;
 	}
@@ -67,8 +76,7 @@ bool World::Initialise()
 	if (!LoadLevel())
 		return false;
 
-	m_ui = std::make_shared<UI>();
-	m_ui->Initialise();
+	UI.Initialise();
 
 	HAPI.SetShowFPS(true);
 
@@ -236,10 +244,15 @@ void World::Play()
 	{
 		const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
 		const HAPI_TControllerData& controllerData = HAPI.GetControllerData(0);
-	
+
 		currentTime = clock();
 
-		if (!timesUp)
+		if (keyData.scanCode['Q']) // very sensitive -- can pause and unpause in a split second :( also doesn't pause timer :(:(
+		{
+			isPaused = !isPaused;
+		}
+
+		if ((!timesUp) && (!isPaused))
 		{
 			if (keyData.scanCode['E'])
 			{
@@ -272,21 +285,21 @@ void World::Play()
 
 				// Game Timer + UI
 				int timerValue = levelTime - ((currentTime - gameStartTime) / CLOCKS_PER_SEC);
-				m_ui->GameTimer(timerValue);
-				m_ui->Controls();
-				m_ui->EggScore(eggsCollected);
-				m_ui->RockCounter(numOfRocks);
+				UI.GameTimer(timerValue);
+				UI.Controls();
+				UI.EggScore(eggsCollected);
+				UI.RockCounter(numOfRocks);
 
 				if (eggsInCoop > 0)
 				{
-					m_ui->EggCoop();
+					UI.EggCoop();
 				}
 
 				if (static_cast<SeedBox*>(seedBox)->GetSeed())
 				{
 					// Draws empty sprite with full sprite on top -- has to be drawn above player
 					VIS.DrawSprite(seedBox->GetID(), seedBox->GetPos().xPos, seedBox->GetPos().yPos);
-					m_ui->SeedFull();
+					UI.SeedFull();
 				}
 				else
 				{
@@ -301,6 +314,7 @@ void World::Play()
 					vector2<int> currentPos = entity->GetPos();
 					entity->Update();
 
+					// COLLISIONS
 					for (auto& entity2 : m_entities)
 					{
 						// Check entitys aren't same side
@@ -315,7 +329,7 @@ void World::Play()
 								}
 							}
 						}
-					}					
+					}
 
 					VIS.DrawSprite(entity->GetID(), entity->GetPos().xPos, entity->GetPos().yPos);
 
@@ -326,7 +340,7 @@ void World::Play()
 						{
 							// Draws empty sprite with full sprite on top -- has to be drawn above player
 							VIS.DrawSprite(seedBox->GetID(), seedBox->GetPos().xPos, seedBox->GetPos().yPos);
-							m_ui->SeedFull();
+							UI.SeedFull();
 						}
 						else
 						{
@@ -339,7 +353,7 @@ void World::Play()
 					{
 						if (static_cast<Feeder*>(feeder)->GetSeed())
 						{
-							m_ui->FeederFull();
+							UI.FeederFull();
 						}
 						else
 						{
@@ -396,6 +410,16 @@ void World::Play()
 					VIS.DrawSprite(rock->GetID(), rock->GetPos().xPos, rock->GetPos().yPos);
 					rock->Movement();
 
+					// Checks cat collisions only while rock is active
+					for (auto& cat : m_catEntities)
+					{
+						if (cat->Collision(*cat, *rock))
+						{
+							cat->SetHit(1);
+							cat->Handle();
+						}
+					}
+
 					if (currentTime >= rockCallTime + rockClockLife)
 					{
 						rock->SetFlag(0);
@@ -430,7 +454,7 @@ void World::Play()
 			{
 				for (auto& cat : m_catEntities)
 				{
-					int uniqueCatRate = rand() % 100;
+					int uniqueCatRate = rand() % 100; // offsets and randomises cat times
 
 					if (currentTime >= catCallTime + uniqueCatRate)
 					{
@@ -449,11 +473,21 @@ void World::Play()
 
 		}
 
-		// Game over / Times up
+		/*	if ((static_cast<Player*>(player)->GetLastDir() != EDirection::eStop))
+			{
+				HAPI.PlaySound("Data\\Sound\\footsteps.wav");
+			}*/
+
+			// Game over / Times up
 		if ((currentTime - gameStartTime) >= gameTimer)
 		{
 			timesUp = true;
-			m_ui->TimesUp();
+			UI.TimesUp();
+
+			if (keyData.scanCode['R'])
+			{
+				currentState = GameState::eRestart;
+			}
 		}
 	}
 }
@@ -461,6 +495,17 @@ void World::Play()
 void World::Exit()
 {
 	// Pause menu needs implementing
+}
+
+void World::Restart()
+{
+	m_entities.clear();
+	m_chickenEntities.clear();
+	m_catEntities.clear();
+
+	LoadLevel();
+	currentState = GameState::eMenu;
+	Run();
 }
 
 void World::Interaction()
@@ -523,6 +568,7 @@ void World::Throw()
 {
 	if (!rock->GetFlag()) // Rock isn't active
 	{
+		HAPI.PlaySound("Data\\Sound\\rock throw.wav");
 		rock->SetFlag(1); // Sets flag to true
 		rock->SetPos(player->GetPos());
 		numOfRocks--;
