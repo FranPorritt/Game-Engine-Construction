@@ -22,6 +22,7 @@ public:
 	void EggScore(int& eggs);
 	void RockCounter(int& rocks);
 	void Controls();
+	void Pause();
 };
 
 #define UI UserInterface::GetInstance()

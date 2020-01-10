@@ -10,6 +10,7 @@ Cat::Cat(const std::string& graphicIDArg, vector2<int> positionArg) : Entity(gra
 	speed = 1;
 	catState = new InactiveState();
 	state = new InactiveState();
+	chickenTarget = NULL;
 }
 
 Cat::~Cat()

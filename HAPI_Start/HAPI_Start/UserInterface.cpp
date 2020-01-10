@@ -35,6 +35,12 @@ bool UserInterface::Initialise()
 	if (!VIS.CreateSprite("Data\\feederFull.png", "feederFull", 1, 1))
 		return false;
 
+	if (!VIS.CreateSprite("Data\\a button.png", "aButt", 1, 1))
+		return false;
+
+	if (!VIS.CreateSprite("Data\\b button.png", "bButt", 1, 1))
+		return false;
+
 	return true;
 }
 
@@ -83,6 +89,13 @@ void UserInterface::RockCounter(int& rocks)
 
 void UserInterface::Controls()
 {
-	HAPI.RenderText(15, 700, HAPI_TColour::WHITE, "USE: E" , 20, eRegular);
-	HAPI.RenderText(15, 730, HAPI_TColour::WHITE, "THROW: F", 20, eRegular);
+	HAPI.RenderText(15, 680, HAPI_TColour::WHITE, "USE: E/" , 25, eRegular);
+	HAPI.RenderText(15, 720, HAPI_TColour::WHITE, "THROW: F/", 25, eRegular);
+	VIS.DrawSprite("aButt", 162, 678);
+	VIS.DrawSprite("bButt", 212, 718);
+}
+
+void UserInterface::Pause()
+{
+	HAPI.RenderText(325, 340, HAPI_TColour::MAGENTA, "PAUSED", 60, eBold);
 }

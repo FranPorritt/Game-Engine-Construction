@@ -156,7 +156,17 @@ bool World::LoadLevel()
 
 	for (int catIndex = 0; catIndex < NUM_OF_CATS; catIndex++)
 	{
-		m_catEntities.push_back(new Cat("cat" + std::to_string(catIndex), { -50, rand() % 350 + 200 }));
+		int xRand = 0;
+		if (rand() % 2 == 0)
+		{
+			xRand = -50; // Left side
+		}
+		else
+		{
+			xRand = VIS.GetScreenWidth() + 50; // Right side			
+		}
+		
+		m_catEntities.push_back(new Cat("cat" + std::to_string(catIndex), { xRand, rand() % 350 + 200 }));
 	}
 
 	rock = new Projectile("rock", { 0,0 }); // Only one, player can only thrown one at a time
@@ -218,6 +228,7 @@ void World::MainMenu()
 	while ((HAPI.Update()) && (currentState == GameState::eMenu))
 	{
 		const HAPI_TKeyboardData& keyData = HAPI.GetKeyboardData();
+		const HAPI_TControllerData& controllerData = HAPI.GetControllerData(0);
 
 		VIS.DrawBackgroundSprite("menuPage", 0, 0);
 
@@ -227,8 +238,20 @@ void World::MainMenu()
 		}
 		else if (keyData.scanCode['2'])
 		{
-			HAPI.Close();
+			currentState = GameState::eQuit;
 			// Doesn't delete stuff - causing memory leaks :(
+		}
+
+		if (controllerData.isAttached)
+		{
+			if (controllerData.digitalButtons[HK_DIGITAL_A])
+			{
+				currentState = GameState::ePlay;
+			}
+			else if (controllerData.digitalButtons[HK_DIGITAL_B])
+			{
+				currentState = GameState::eQuit;
+			}
 		}
 	}
 }
@@ -247,9 +270,17 @@ void World::Play()
 
 		currentTime = clock();
 
-		if (keyData.scanCode['Q']) // very sensitive -- can pause and unpause in a split second :( also doesn't pause timer :(:(
+		// Pause control
+		if (keyData.scanCode[27]) // very sensitive -- can pause and unpause in a split second :( also doesn't pause timer :(:(
 		{
 			isPaused = !isPaused;
+		}
+		if (controllerData.isAttached)
+		{
+			if (controllerData.digitalButtons[HK_DIGITAL_START])
+			{
+				isPaused = !isPaused;
+			}
 		}
 
 		if ((!timesUp) && (!isPaused))
@@ -284,7 +315,7 @@ void World::Play()
 				VIS.DrawBackgroundSprite("background", 0, 0);
 
 				// Game Timer + UI
-				int timerValue = levelTime - ((currentTime - gameStartTime) / CLOCKS_PER_SEC);
+				int timerValue = levelTime - (((currentTime - gameStartTime) + pausedTime) / CLOCKS_PER_SEC);
 				UI.GameTimer(timerValue);
 				UI.Controls();
 				UI.EggScore(eggsCollected);
@@ -475,11 +506,16 @@ void World::Play()
 
 		/*	if ((static_cast<Player*>(player)->GetLastDir() != EDirection::eStop))
 			{
-				HAPI.PlaySound("Data\\Sound\\footsteps.wav");
+				HAPI.PlaySound("Data\\Sound\\footsteps.wav"); // Getting called too many times
 			}*/
 
-			// Game over / Times up
-		if ((currentTime - gameStartTime) >= gameTimer)
+		if (isPaused)
+		{
+			UI.Pause();
+		}
+
+		// Game over / Times up
+		if ((currentTime - gameStartTime) >= gameTimer + pausedTime)
 		{
 			timesUp = true;
 			UI.TimesUp();
@@ -494,7 +530,7 @@ void World::Play()
 
 void World::Exit()
 {
-	// Pause menu needs implementing
+	HAPI.Close();
 }
 
 void World::Restart()

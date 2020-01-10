@@ -13,7 +13,8 @@
 // 21-12-2019
 //
 // Interaction is now working but only works when player is stood at certain points
-// Removed interaction box but may need to add it back??
+// Removed interaction box but may need to add it back??    -> (06/01/20) Issue was after removing interactionBox I forgot to change the rect calculations to 
+//																use the normal rect values!
 
 // 24-12-2019
 //
@@ -153,3 +154,21 @@
 //
 // Pause works but button press is sensitive
 // Doesn't stop timer - simple fix should just to be to track how much time passes during paused time and it to game timer?
+
+// 09-01-2020
+//
+// Last-minute to do (final touches):
+// - Dust cloud / feathers when chicken gets ate  -> wait, that's animation :(
+// - Controls page on menu
+// - pause ui
+// - put deletes in quit - see if that fixes leaks
+// - high score
+// - check error handling is in place
+// - could change up UI, UI.Text(string, fontSize, pos)?  -> makes it a reusable system?
+
+
+// HAND-IN CHECKLIST
+// - REPORT
+//		- CHECKLIST
+//		- UML DIAGRAMS
+// - VIDEO

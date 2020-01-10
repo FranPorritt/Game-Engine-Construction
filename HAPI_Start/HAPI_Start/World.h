@@ -43,12 +43,15 @@ private:
 	clock_t chickenCallTime = clock(); 
 	clock_t catCallTime = clock();
 	clock_t rockCallTime = clock();
+	clock_t pauseStartTime = clock();
+	clock_t pauseEndTime = clock();
 	const double tickRate = 1000 / 60;
 	int chickenRate = rand() % 200 + 200;
 	int catRate = rand() % 200 + 200;
+	int pausedTime = 0;
 
 	const int NUM_OF_CHICKENS = 10;
-	const int NUM_OF_CATS = 5;
+	const int NUM_OF_CATS = 8;
 
 	const int rockSecondsLife = 1; // Time in secs
 	int rockClockLife = 0; // Time in clock value

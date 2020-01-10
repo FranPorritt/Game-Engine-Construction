@@ -17,7 +17,7 @@ Visualisation::Visualisation()
 {
 	screenWidth = 1024;
 	screenHeight = 768;
-	if (!HAPI.Initialise(screenWidth, screenHeight, "Francesca Porritt - V8078659"))
+	if (!HAPI.Initialise(screenWidth, screenHeight, "CHICKENS | Francesca Porritt - V8078659"))
 		return;
 
 	destRect.bottom = screenHeight;
